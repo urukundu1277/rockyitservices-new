@@ -31,16 +31,24 @@ export default function Hero({ openBooking }){
           <div className="text-gray-900">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight">Rocky IT Services</h1>
             <div className="mt-6 space-y-3 text-md md:text-lg text-gray-700">
-              <p>Rocky IT Services, our goal is to support businesses and individuals with reliable and modern IT solutions.
-We help clients improve productivity, business growth, and digital presence through smart technology services.
-Our focus is on providing smooth, secure, and efficient IT support for daily operations.
-We deliver services like website development, cloud solutions, networking, and technical support.
-Our mission is to simplify technology and make it accessible for every business.
-We are committed to building long-term partnerships through trusted and professional IT services.</p>
-            </div>
+  <p>
+    At Rocky IT Services, our goal is to support businesses and individuals with reliable and modern IT solutions. 
+    We help clients improve productivity, business growth, and digital presence through smart technology services.
+  </p>
+
+  <p>
+    Our focus is on providing smooth, secure, and efficient IT support for daily operations. 
+    We deliver services like website development, cloud solutions, networking, and technical support.
+  </p>
+
+  <p>
+    Our mission is to simplify technology and make it accessible for every business. 
+    We are committed to building long-term partnerships through trusted and professional IT services.
+  </p>
+</div>
             <div className="mt-8 flex gap-4">
-              <button onClick={() => openBooking({ title: 'Consultation' })} className="px-6 py-3 bg-gradient-to-r from-cyan-400 to-violet-600 text-white font-semibold rounded-xl shadow-lg hover:scale-105 transition">Get Free Consultation</button>
-              <a href="/services" className="px-5 py-3 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-100 transition">Our Services</a>
+              <button onClick={() => openBooking({ title: 'Consultation' })} className="px-6 py-3 bg-gradient-to-r from-cyan-400 to-violet-600 text-white font-semibold rounded-xl shadow-lg hover:scale-105 transition">Contact to Our Team</button>
+              <a href="/services" className="px-6 py-3 bg-gradient-to-r from-cyan-400 to-violet-600 text-white font-semibold rounded-xl shadow-lg hover:scale-105 transition">Our Services</a>
             </div>
           </div>
 
