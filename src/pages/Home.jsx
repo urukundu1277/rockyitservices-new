@@ -250,21 +250,21 @@ export default function Home() {
             
             <div className="relative z-10">
               <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-3xl mb-4 shadow-lg transform group-hover:scale-110 transition-transform duration-300">
-                👨‍💻
+              <span className="text-xl">👨‍💻</span>
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-3">Experienced Team</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">Professional IT Support</h3>
               <p className="text-gray-700 leading-relaxed">
-                Our certified technicians bring real-world expertise with years of hands-on experience in IT support, hardware repairs, and system management.
+                We help home users and small businesses with reliable IT services, technical support, and smart technology solutions for daily needs.
               </p>
               
               <div className="mt-6 space-y-2">
                 <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <span className="text-blue-600 font-bold">✓</span>
-                  <span>Industry Certified Professionals</span>
+                  <span className="text-blue-600 font-bold"></span>
+                  <span>Friendly Technical Assistance</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <span className="text-blue-600 font-bold">✓</span>
-                  <span>10+ Years Combined Experience</span>
+                  <span className="text-blue-600 font-bold"></span>
+                  <span>Reliable IT Solutions</span>
                 </div>
               </div>
             </div>
@@ -278,21 +278,21 @@ export default function Home() {
             
             <div className="relative z-10">
               <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center text-white text-3xl mb-4 shadow-lg transform group-hover:scale-110 transition-transform duration-300">
-                ⚡
+              <span className="text-xl">⚡</span>
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-3">Fast Turnaround</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">Fast & Efficient Service</h3>
               <p className="text-gray-700 leading-relaxed">
-                Quick diagnostics and efficient repairs mean minimal downtime for your systems and maximum productivity for your business or home.
+                Our team provides quick response and smooth support to reduce downtime and keep your systems working properly.
               </p>
               
               <div className="mt-6 space-y-2">
                 <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <span className="text-emerald-600 font-bold">✓</span>
-                  <span>Same-Day Service Available</span>
+                  <span className="text-emerald-600 font-bold"></span>
+                  <span>Quick Issue Resolution</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <span className="text-emerald-600 font-bold">✓</span>
-                  <span>Rapid Problem Resolution</span>
+                  <span className="text-emerald-600 font-bold"></span>
+                  <span>Smooth Service Experience</span>
                 </div>
               </div>
             </div>
@@ -306,21 +306,21 @@ export default function Home() {
             
             <div className="relative z-10">
               <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center text-white text-3xl mb-4 shadow-lg transform group-hover:scale-110 transition-transform duration-300">
-                🛡️
+              <span className="text-xl">🛡️</span>
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-3">Trusted Support</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">Trusted Customer Support</h3>
               <p className="text-gray-700 leading-relaxed">
-                Secure processes and reliable remote assistance ensure your data and systems are protected while getting professional help when you need it.
+                We are committed to delivering secure, dependable, and professional IT support with customer satisfaction as our priority.
               </p>
               
               <div className="mt-6 space-y-2">
                 <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <span className="text-purple-600 font-bold">✓</span>
-                  <span>Data Security Guaranteed</span>
+                  <span className="text-purple-600 font-bold"></span>
+                  <span>Safe & Secure Assistance</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <span className="text-purple-600 font-bold">✓</span>
-                  <span>24/7 Reliable Support</span>
+                  <span className="text-purple-600 font-bold"></span>
+                  <span>Dedicated Support Service</span>
                 </div>
               </div>
             </div>
@@ -331,4 +331,4 @@ export default function Home() {
       <Footer />
     </div>
   );
-}
+} // export default Home; // export default Home;           
