@@ -36,6 +36,11 @@ export default function Home() {
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
+  const openBooking = (service) => {
+    setBookingForm({ name: '', phone: '', whatsappLocal: '', email: '', requirement: '', serviceType: service.title });
+    setShowBooking(true);
+  };
+
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
@@ -82,11 +87,6 @@ export default function Home() {
       // ignore
     }
   }, []);
-
-  const openBooking = (service) => {
-    setBookingForm({ name: '', phone: '', whatsappLocal: '', email: '', requirement: '', serviceType: service.title });
-    setShowBooking(true);
-  };
 
   const handleBookingChange = (e) => setBookingForm({ ...bookingForm, [e.target.name]: e.target.value });
 
@@ -162,7 +162,7 @@ export default function Home() {
 
       <Hero openBooking={openBooking} />
 
-      <section className="max-w-7xl mx-auto px-6 py-12">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
         <h2 className="text-3xl font-bold text-gray-800">Our Services</h2>
         <p className="text-gray-600 mt-2">A quick preview of services we provide.</p>
 
@@ -178,9 +178,9 @@ export default function Home() {
       {/* Contact moved to a dedicated page for cleaner UI */}
 
       {showBooking && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/40" onClick={() => setShowBooking(false)} />
-          <div className="relative w-full max-w-md bg-white rounded-xl p-6 shadow-2xl">
+          <div className="relative w-full max-w-md bg-white rounded-xl p-5 sm:p-6 shadow-2xl max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-semibold">Book Service: {bookingForm.serviceType}</h3>
               <button onClick={() => setShowBooking(false)} className="text-gray-500">Close</button>
@@ -203,8 +203,8 @@ export default function Home() {
       )}
 
       {showSuccess && (
-        <div className="fixed right-6 bottom-6 z-50">
-          <div className="max-w-sm w-full bg-emerald-600 text-white rounded-lg shadow-lg p-4 flex items-start gap-3 animate-enter">
+        <div className="fixed left-4 right-4 bottom-4 md:left-auto md:right-6 md:bottom-6 z-50">
+          <div className="max-w-sm mx-auto md:mx-0 w-full bg-emerald-600 text-white rounded-lg shadow-lg p-4 flex items-start gap-3 animate-enter">
             <div className="flex-shrink-0">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.707a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 10-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
@@ -220,8 +220,8 @@ export default function Home() {
       )}
 
       {showError && (
-        <div className="fixed right-6 bottom-20 z-50">
-          <div className="max-w-sm w-full bg-red-600 text-white rounded-lg shadow-lg p-4 flex items-start gap-3 animate-enter">
+        <div className="fixed left-4 right-4 bottom-4 md:left-auto md:right-6 md:bottom-20 z-50">
+          <div className="max-w-sm mx-auto md:mx-0 w-full bg-red-600 text-white rounded-lg shadow-lg p-4 flex items-start gap-3 animate-enter">
             <div className="flex-shrink-0">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1-9V6a1 1 0 112 0v3a1 1 0 11-2 0zm0 4a1 1 0 102 0 1 1 0 00-2 0z" clipRule="evenodd" />
@@ -235,20 +235,95 @@ export default function Home() {
         </div>
       )}
 
-      <section className="max-w-7xl mx-auto px-6 py-12 bg-white rounded-3xl shadow-lg">
-        <h3 className="text-2xl font-bold">Why Choose Rocky IT Services?</h3>
-        <div className="mt-6 grid md:grid-cols-3 gap-6 text-gray-700">
-          <div className="space-y-2">
-            <h4 className="font-semibold">Experienced Team</h4>
-            <p>Certified technicians with real-world experience.</p>
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4">Why Choose Rocky IT Services?</h2>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">We deliver excellence through expert professionals, rapid solutions, and unwavering commitment to your success.</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Card 1: Experienced Team */}
+          <div
+            className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
+          >
+            <div className="absolute top-0 right-0 w-32 h-32 bg-blue-200 rounded-full -mr-16 -mt-16 opacity-20 group-hover:opacity-40 transition-opacity" />
+            
+            <div className="relative z-10">
+              <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-3xl mb-4 shadow-lg transform group-hover:scale-110 transition-transform duration-300">
+                👨‍💻
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">Experienced Team</h3>
+              <p className="text-gray-700 leading-relaxed">
+                Our certified technicians bring real-world expertise with years of hands-on experience in IT support, hardware repairs, and system management.
+              </p>
+              
+              <div className="mt-6 space-y-2">
+                <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <span className="text-blue-600 font-bold">✓</span>
+                  <span>Industry Certified Professionals</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <span className="text-blue-600 font-bold">✓</span>
+                  <span>10+ Years Combined Experience</span>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="space-y-2">
-            <h4 className="font-semibold">Fast Turnaround</h4>
-            <p>Rapid diagnostics and efficient repairs.</p>
+
+          {/* Card 2: Fast Turnaround */}
+          <div
+            className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-50 to-emerald-100 p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
+          >
+            <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-200 rounded-full -mr-16 -mt-16 opacity-20 group-hover:opacity-40 transition-opacity" />
+            
+            <div className="relative z-10">
+              <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center text-white text-3xl mb-4 shadow-lg transform group-hover:scale-110 transition-transform duration-300">
+                ⚡
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">Fast Turnaround</h3>
+              <p className="text-gray-700 leading-relaxed">
+                Quick diagnostics and efficient repairs mean minimal downtime for your systems and maximum productivity for your business or home.
+              </p>
+              
+              <div className="mt-6 space-y-2">
+                <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <span className="text-emerald-600 font-bold">✓</span>
+                  <span>Same-Day Service Available</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <span className="text-emerald-600 font-bold">✓</span>
+                  <span>Rapid Problem Resolution</span>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="space-y-2">
-            <h4 className="font-semibold">Trusted Support</h4>
-            <p>Secure processes and reliable remote assistance.</p>
+
+          {/* Card 3: Trusted Support */}
+          <div
+            className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-purple-50 to-purple-100 p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
+          >
+            <div className="absolute top-0 right-0 w-32 h-32 bg-purple-200 rounded-full -mr-16 -mt-16 opacity-20 group-hover:opacity-40 transition-opacity" />
+            
+            <div className="relative z-10">
+              <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center text-white text-3xl mb-4 shadow-lg transform group-hover:scale-110 transition-transform duration-300">
+                🛡️
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">Trusted Support</h3>
+              <p className="text-gray-700 leading-relaxed">
+                Secure processes and reliable remote assistance ensure your data and systems are protected while getting professional help when you need it.
+              </p>
+              
+              <div className="mt-6 space-y-2">
+                <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <span className="text-purple-600 font-bold">✓</span>
+                  <span>Data Security Guaranteed</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <span className="text-purple-600 font-bold">✓</span>
+                  <span>24/7 Reliable Support</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

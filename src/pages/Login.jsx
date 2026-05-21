@@ -87,9 +87,9 @@ export default function Login() {
 
       <Navbar />
 
-      <div className="flex justify-center items-center py-20">
+      <div className="flex justify-center items-center px-4 py-10 sm:py-20">
 
-        <div className="bg-white shadow-2xl rounded-3xl p-10 w-full max-w-lg">
+        <div className="bg-white shadow-2xl rounded-2xl sm:rounded-3xl p-6 sm:p-10 w-full max-w-lg">
 
           <h1 className="text-4xl font-bold text-center text-gray-800">
 

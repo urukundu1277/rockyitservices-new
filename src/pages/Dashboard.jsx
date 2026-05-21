@@ -28,21 +28,21 @@ export default function Dashboard() {
 
       <Navbar />
 
-      <section className="max-w-7xl mx-auto px-6 py-16">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
 
         {/* TOP */}
 
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
 
           <div>
 
-            <h1 className="text-5xl font-bold text-gray-800">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-800">
 
               Customer Dashboard
 
             </h1>
 
-            <p className="mt-4 text-lg text-gray-600">
+            <p className="mt-2 sm:mt-4 text-md sm:text-lg text-gray-600">
 
               Welcome back,
               {user?.name}
@@ -53,7 +53,7 @@ export default function Dashboard() {
 
           <button
             onClick={handleLogout}
-            className="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-xl font-bold"
+            className="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-xl font-bold w-full sm:w-auto"
           >
             Logout
           </button>
@@ -62,9 +62,9 @@ export default function Dashboard() {
 
         {/* CARDS */}
 
-        <div className="grid md:grid-cols-3 gap-6 mt-14">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-10 sm:mt-14">
 
-          <div className="bg-white p-8 rounded-3xl shadow-xl">
+          <div className="bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl shadow-xl">
 
             <h2 className="text-gray-500 text-lg">
 
@@ -80,7 +80,7 @@ export default function Dashboard() {
 
           </div>
 
-          <div className="bg-white p-8 rounded-3xl shadow-xl">
+          <div className="bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl shadow-xl">
 
             <h2 className="text-gray-500 text-lg">
 
@@ -96,7 +96,7 @@ export default function Dashboard() {
 
           </div>
 
-          <div className="bg-white p-8 rounded-3xl shadow-xl">
+          <div className="bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl shadow-xl">
 
             <h2 className="text-gray-500 text-lg">
 
@@ -116,9 +116,9 @@ export default function Dashboard() {
 
         {/* SUPPORT FORM */}
 
-        <div className="bg-white rounded-3xl shadow-xl mt-14 p-10">
+        <div className="bg-white rounded-2xl sm:rounded-3xl shadow-xl mt-10 sm:mt-14 p-6 sm:p-10">
 
-          <h2 className="text-4xl font-bold text-gray-800">
+          <h2 className="text-2xl sm:text-4xl font-bold text-gray-800">
 
             Raise Support Ticket
 

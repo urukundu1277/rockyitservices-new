@@ -35,7 +35,7 @@ export default function Services() {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
 
-      <section className="max-w-7xl mx-auto px-6 py-16">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
         <h1 className="text-4xl font-bold text-gray-800">Our Services</h1>
         <p className="mt-2 text-gray-600">Comprehensive IT services for businesses and home users.</p>
 

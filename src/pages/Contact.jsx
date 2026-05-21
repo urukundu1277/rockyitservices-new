@@ -65,8 +65,8 @@ export default function Contact() {
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
       <Navbar />
 
-      <main className="max-w-3xl mx-auto px-6 py-20">
-        <div className="bg-white rounded-3xl shadow-2xl p-8">
+      <main className="max-w-3xl mx-auto px-4 sm:px-6 py-10 sm:py-20">
+        <div className="bg-white rounded-2xl sm:rounded-3xl shadow-2xl p-6 sm:p-8">
           <h3 className="text-2xl font-bold">New Customer Registration</h3>
           <p className="mt-2 text-gray-600">Submit your requirement and our IT team will contact you.</p>
 
@@ -86,8 +86,8 @@ export default function Contact() {
       </main>
 
       {showSuccess && (
-        <div className="fixed right-6 bottom-6 z-50">
-          <div className="max-w-sm w-full bg-emerald-600 text-white rounded-lg shadow-lg p-4 flex items-start gap-3">
+        <div className="fixed left-4 right-4 bottom-4 md:left-auto md:right-6 md:bottom-6 z-50">
+          <div className="max-w-sm mx-auto md:mx-0 w-full bg-emerald-600 text-white rounded-lg shadow-lg p-4 flex items-start gap-3">
             <div className="flex-shrink-0">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.707a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 10-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
@@ -103,8 +103,8 @@ export default function Contact() {
       )}
 
       {showError && (
-        <div className="fixed right-6 bottom-20 z-50">
-          <div className="max-w-sm w-full bg-red-600 text-white rounded-lg shadow-lg p-4 flex items-start gap-3">
+        <div className="fixed left-4 right-4 bottom-4 md:left-auto md:right-6 md:bottom-20 z-50">
+          <div className="max-w-sm mx-auto md:mx-0 w-full bg-red-600 text-white rounded-lg shadow-lg p-4 flex items-start gap-3">
             <div className="flex-shrink-0">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1-9V6a1 1 0 112 0v3a1 1 0 11-2 0zm0 4a1 1 0 102 0 1 1 0 00-2 0z" clipRule="evenodd" />

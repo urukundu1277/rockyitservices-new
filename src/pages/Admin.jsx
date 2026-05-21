@@ -91,56 +91,60 @@ export default function Admin() {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
 
-      <section className="max-w-7xl mx-auto px-6 py-10">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <div>
-            <h1 className="text-4xl font-bold text-gray-800">Admin Dashboard</h1>
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">Admin Dashboard</h1>
             <p className="text-gray-600 mt-1">Manage customer leads and support requests</p>
           </div>
 
-            <div className="flex items-center gap-3">
-              <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search by name, email, phone or requirement" className="border border-gray-200 rounded-lg px-4 py-2 w-72" />
-              <button onClick={() => fetchCustomers()} className="px-4 py-2 bg-green-600 text-white rounded-lg">Refresh</button>
-              <button onClick={() => setCompactView(v => !v)} className="px-3 py-2 bg-gray-100 rounded-lg">{compactView ? 'Normal View' : 'Compact View'}</button>
-              <button onClick={() => { localStorage.removeItem('adminAuth'); navigate('/admin-login'); }} className="px-4 py-2 bg-red-500 text-white rounded-lg">Logout</button>
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3 w-full lg:w-auto">
+              <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search by name, email, phone or requirement" className="border border-gray-200 rounded-lg px-4 py-2 w-full sm:w-72" />
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3 w-full sm:w-auto">
+                <button onClick={() => fetchCustomers()} className="flex-1 sm:flex-initial px-4 py-2 bg-green-600 text-white rounded-lg text-sm">Refresh</button>
+                <button onClick={() => setCompactView(v => !v)} className="flex-1 sm:flex-initial px-3 py-2 bg-gray-100 rounded-lg text-sm">{compactView ? 'Normal View' : 'Compact View'}</button>
+                <button onClick={() => { localStorage.removeItem('adminAuth'); navigate('/admin-login'); }} className="flex-1 sm:flex-initial px-4 py-2 bg-red-500 text-white rounded-lg text-sm">Logout</button>
+              </div>
             </div>
         </div>
 
-        <div className="grid md:grid-cols-4 gap-6 mt-8">
-          <div className="bg-gradient-to-br from-white to-gray-50 p-6 rounded-2xl shadow">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mt-8">
+          <div className="bg-gradient-to-br from-white to-gray-50 p-4 sm:p-6 rounded-2xl shadow">
             <div className="text-sm text-gray-500">Total Requests</div>
-            <div className="text-3xl font-bold mt-2">{customers.length}</div>
+            <div className="text-2xl sm:text-3xl font-bold mt-2">{customers.length}</div>
           </div>
-          <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 p-6 rounded-2xl shadow">
+          <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 p-4 sm:p-6 rounded-2xl shadow">
             <div className="text-sm text-gray-500">New Leads</div>
-            <div className="text-3xl font-bold mt-2 text-yellow-600">{customers.filter(c => (c.status || 'New Lead') === 'New Lead').length}</div>
+            <div className="text-2xl sm:text-3xl font-bold mt-2 text-yellow-600">{customers.filter(c => (c.status || 'New Lead') === 'New Lead').length}</div>
           </div>
-          <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 p-6 rounded-2xl shadow">
+          <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 p-4 sm:p-6 rounded-2xl shadow">
             <div className="text-sm text-gray-500">Follow Ups</div>
-            <div className="text-3xl font-bold mt-2 text-indigo-600">{customers.filter(c => (c.status || 'New Lead') === 'Follow Up').length}</div>
+            <div className="text-2xl sm:text-3xl font-bold mt-2 text-indigo-600">{customers.filter(c => (c.status || 'New Lead') === 'Follow Up').length}</div>
           </div>
-          <div className="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-2xl shadow">
+          <div className="bg-gradient-to-br from-green-50 to-green-100 p-4 sm:p-6 rounded-2xl shadow">
             <div className="text-sm text-gray-500">Resolved</div>
-            <div className="text-3xl font-bold mt-2 text-green-600">{customers.filter(c => (c.status || 'New Lead') === 'Resolved').length}</div>
+            <div className="text-2xl sm:text-3xl font-bold mt-2 text-green-600">{customers.filter(c => (c.status || 'New Lead') === 'Resolved').length}</div>
           </div>
         </div>
 
         <div className="bg-white rounded-2xl shadow mt-8 overflow-hidden">
-            <div className="p-6 border-b flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div className="p-4 sm:p-6 border-b flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div>
               <h2 className="text-xl font-semibold">Customer Requests</h2>
               <div className="text-sm text-gray-500">Manage leads and update statuses</div>
             </div>
 
-            <div className="flex items-center gap-3">
-              <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search name, phone, email or requirement" className="border border-gray-200 rounded-lg px-3 py-2 w-64" />
-              <select value={filterStatus} onChange={(e)=>setFilterStatus(e.target.value)} className="border border-gray-200 rounded-lg px-3 py-2">
-                <option value="All">All Statuses</option>
-                {statuses.map(s => <option key={s} value={s}>{s}</option>)}
-              </select>
-              <button onClick={() => setSortLatest(s => !s)} className="px-3 py-2 bg-gray-100 rounded-lg">{sortLatest ? 'Sort: Latest' : 'Sort: Natural'}</button>
-              <button onClick={() => setCompactView(v => !v)} className="px-3 py-2 bg-gray-100 rounded-lg hidden md:inline">{compactView ? 'Normal View' : 'Compact View'}</button>
-              <button onClick={() => fetchCustomers()} className="px-4 py-2 bg-green-600 text-white rounded-lg">Refresh</button>
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3 w-full lg:w-auto">
+              <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search name, phone, email or requirement" className="border border-gray-200 rounded-lg px-3 py-2 w-full sm:w-64" />
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3 w-full sm:w-auto">
+                <select value={filterStatus} onChange={(e)=>setFilterStatus(e.target.value)} className="flex-1 sm:flex-initial border border-gray-200 rounded-lg px-3 py-2 bg-white">
+                  <option value="All">All Statuses</option>
+                  {statuses.map(s => <option key={s} value={s}>{s}</option>)}
+                </select>
+                <button onClick={() => setSortLatest(s => !s)} className="flex-1 sm:flex-initial px-3 py-2 bg-gray-100 rounded-lg text-sm">{sortLatest ? 'Sort: Latest' : 'Sort: Natural'}</button>
+                <button onClick={() => setCompactView(v => !v)} className="flex-1 sm:flex-initial px-3 py-2 bg-gray-100 rounded-lg hidden md:inline text-sm">{compactView ? 'Normal View' : 'Compact View'}</button>
+                <button onClick={() => fetchCustomers()} className="flex-1 sm:flex-initial px-4 py-2 bg-green-600 text-white rounded-lg text-sm">Refresh</button>
+              </div>
             </div>
           </div>
 

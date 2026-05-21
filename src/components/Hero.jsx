@@ -44,13 +44,13 @@ We are committed to building long-term partnerships through trusted and professi
             </div>
           </div>
 
-          <div className="relative flex items-center justify-center">
+          <div className="relative flex items-center justify-center min-h-[360px] sm:min-h-[480px] md:min-h-[550px] py-10 md:py-0">
             <div className="relative z-20 flex items-center justify-center rounded-full bg-white/6 backdrop-blur-md border border-white/10 shadow-[0_10px_40px_rgba(124,58,237,0.12)] w-72 h-72 md:w-96 md:h-96">
               <img src={logo} alt="Rocky IT Services" className="w-48 h-48 md:w-64 md:h-64 object-contain" />
             </div>
 
             {orbits.map((r) => (
-              <div key={r} className="absolute" 
+              <div key={r} className="absolute orbit-container" 
                 style={{ width: r*2, height: r*2, left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }}
               >
                 <div className="absolute inset-0 rounded-full border border-white/6" style={{ boxShadow: 'inset 0 0 40px rgba(124,58,237,0.03)' }} />
@@ -77,7 +77,21 @@ We are committed to building long-term partnerships through trusted and professi
         </div>
       </div>
 
-      <style>{`\n        /* All motion removed: icons fixed around the logo for clarity */\n        .service-btn{ transition: transform 180ms ease, box-shadow 180ms ease; }\n        .service-btn:hover{ transform: translateY(-4px) scale(1.04); box-shadow: 0 10px 22px rgba(2,6,23,0.55); }\n      `}</style>
+      <style>{`
+        /* All motion removed: icons fixed around the logo for clarity */
+        .service-btn{ transition: transform 180ms ease, box-shadow 180ms ease; }
+        .service-btn:hover{ transform: translateY(-4px) scale(1.04); box-shadow: 0 10px 22px rgba(2,6,23,0.55); }
+        @media (max-width: 640px) {
+          .orbit-container {
+            transform: translate(-50%, -50%) scale(0.6) !important;
+          }
+        }
+        @media (min-width: 641px) and (max-width: 1024px) {
+          .orbit-container {
+            transform: translate(-50%, -50%) scale(0.8) !important;
+          }
+        }
+      `}</style>
     </section>
   );
 }
