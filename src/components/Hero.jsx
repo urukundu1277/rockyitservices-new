@@ -11,25 +11,28 @@ const services = [
   'Server Maintenance'
 ];
 
-function ServiceIcon({ label, size = 96 }){
-  const fontSize = Math.max(8, Math.floor(size / 10));
+function ServiceIcon({ label, size = 80 }){
+  const fontSize = Math.max(7, Math.floor(size / 11));
   return (
-    <div aria-label={label} role="img" className="transition-transform duration-150 hover:scale-105 hover:shadow-xl cursor-pointer" style={{ width: size, height: size, borderRadius: '9999px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(90deg,#06b6d4 0%,#7C3AED 100%)', padding: 8 }}>
-      <span style={{ color: '#fff', fontSize: `${fontSize}px`, fontWeight: 700, textAlign: 'center', lineHeight: '1.05', wordBreak: 'break-word', padding: '0 6px' }}>{label}</span>
+    <div aria-label={label} role="img" className="transition-all duration-200 hover:scale-110 hover:shadow-2xl cursor-pointer" style={{ width: size, height: size, borderRadius: '9999px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg,#06b6d4 0%,#7C3AED 100%)', padding: 6, boxShadow: '0 4px 15px rgba(124,58,237,0.25)' }}>
+      <span style={{ color: '#fff', fontSize: `${fontSize}px`, fontWeight: 700, textAlign: 'center', lineHeight: '1.1', wordBreak: 'break-word', padding: '0 4px' }}>{label}</span>
     </div>
   );
 }
 
 export default function Hero({ openBooking }){
   const count = services.length;
-  const orbits = useMemo(() => [260], []);
+  const orbits = useMemo(() => [200], []);
 
   return (
     <section className="relative w-full overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 py-20 md:py-28">
           <div className="grid lg:grid-cols-2 xl:grid-cols-2 gap-8 items-center">
           <div className="text-gray-900">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight">Rocky IT Services</h1>
+            <div className="mb-2">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight text-gray-900">Rocky IT Services</h1>
+              <p className="text-base sm:text-lg md:text-xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-violet-600 mt-2">IT Support & Managed Services</p>
+            </div>
             <div className="mt-6 space-y-3 text-base sm:text-lg text-gray-700">
   <p>
     At Rocky IT Services, our goal is to support businesses and individuals with reliable and modern IT solutions. 
@@ -52,9 +55,9 @@ export default function Hero({ openBooking }){
             </div>
           </div>
 
-          <div className="relative flex items-center justify-center min-h-[360px] sm:min-h-[480px] lg:min-h-[550px] py-10 lg:py-0">
-            <div className="relative z-20 flex items-center justify-center rounded-full bg-white/6 backdrop-blur-md border border-white/10 shadow-[0_10px_40px_rgba(124,58,237,0.12)] w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96">
-              <img src={logo} alt="Rocky IT Services" className="w-40 h-40 md:w-56 md:h-56 lg:w-64 lg:h-64 object-contain" />
+          <div className="relative flex items-center justify-center min-h-[400px] sm:min-h-[450px] md:min-h-[500px] lg:min-h-[550px] py-8 lg:py-0 px-4">
+            <div className="relative z-20 flex items-center justify-center rounded-full bg-white/5 backdrop-blur-sm border border-white/10 shadow-[0_8px_32px_rgba(124,58,237,0.15)] w-56 h-56 sm:w-64 sm:h-64 md:w-72 md:h-72 lg:w-80 lg:h-80">
+              <img src={logo} alt="Rocky IT Services" className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 object-contain" />
             </div>
 
             {orbits.map((r) => (
@@ -67,11 +70,11 @@ export default function Hero({ openBooking }){
                   const radians = (angle * Math.PI) / 180;
                   const x = Math.cos(radians) * r;
                   const y = Math.sin(radians) * r;
-                  const iconSz = 100; // circle size large enough for full name
-                  const outerSz = iconSz; // container equals icon size (label sits inside)
+                  const iconSz = 80;
+                  const outerSz = iconSz;
                   return (
                     <div key={s}
-                      className={`absolute flex items-center justify-center`} 
+                      className={`absolute flex items-center justify-center transition-transform duration-300`} 
                       style={{ left: `calc(50% + ${x}px)`, top: `calc(50% + ${y}px)`, width: outerSz, height: outerSz, transform: 'translate(-50%, -50%)' }}
                       title={s}
                     >
@@ -86,24 +89,38 @@ export default function Hero({ openBooking }){
       </div>
 
       <style>{`
-        /* All motion removed: icons fixed around the logo for clarity */
-        .service-btn{ transition: transform 180ms ease, box-shadow 180ms ease; }
-        .service-btn:hover{ transform: translateY(-4px) scale(1.04); box-shadow: 0 10px 22px rgba(2,6,23,0.55); }
-        @media (max-width: 768px) {
+        .orbit-container {
+          transition: transform 0.3s ease-out;
+        }
+        
+        @media (max-width: 480px) {
+          .orbit-container {
+            transform: translate(-50%, -50%) scale(0.55) !important;
+          }
+        }
+        
+        @media (min-width: 481px) and (max-width: 640px) {
           .orbit-container {
             transform: translate(-50%, -50%) scale(0.65) !important;
           }
         }
+        
+        @media (min-width: 641px) and (max-width: 768px) {
+          .orbit-container {
+            transform: translate(-50%, -50%) scale(0.75) !important;
+          }
+        }
+        
         @media (min-width: 769px) and (max-width: 1024px) {
           .orbit-container {
-            transform: translate(-50%, -50%) scale(0.8) !important;
+            transform: translate(-50%, -50%) scale(0.85) !important;
           }
         }
-        @media (min-width: 1025px) and (max-width: 1280px) {
+        
+        @media (min-width: 1025px) {
           .orbit-container {
-            transform: translate(-50%, -50%) scale(0.9) !important;
+            transform: translate(-50%, -50%) scale(1) !important;
           }
-        }
         }
       `}</style>
     </section>
