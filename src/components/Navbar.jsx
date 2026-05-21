@@ -19,8 +19,8 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
         <div>
           <NavLink to="/" className="flex flex-col" onClick={() => { setOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} aria-label="Go to home">
-            <span className="text-2xl md:text-3xl font-extrabold tracking-tight">Rocky IT Services</span>
-            <span className="text-sm text-gray-400 -mt-1">IT support & managed services</span>
+            <span className="text-xl md:text-3xl font-extrabold tracking-tight">Rocky IT Services</span>
+            <span className="text-xs md:text-sm text-gray-400 -mt-1">IT support & managed services</span>
           </NavLink>
         </div>
 
@@ -58,14 +58,14 @@ export default function Navbar() {
       </div>
 
       {/* Mobile menu panel */}
-      <div className={`md:hidden bg-gradient-to-b from-gray-900 to-black/80 transition-max-height duration-300 overflow-hidden ${open ? 'max-h-96' : 'max-h-0'}`}>
-        <div className="px-6 py-4 flex flex-col gap-3">
+      <div className={`md:hidden bg-gradient-to-b from-gray-900 to-black/80 transition-all duration-300 ease-in-out overflow-hidden ${open ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 pointer-events-none'}`}>
+        <div className="px-6 py-4 flex flex-col gap-3 border-t border-gray-700">
           {links.map((l) => (
             <NavLink
               key={l.to}
               to={l.to}
               onClick={() => setOpen(false)}
-              className={({ isActive }) => `block px-3 py-2 rounded-lg ${isActive ? active : inactive}`}
+              className={({ isActive }) => `block px-4 py-3 rounded-lg text-lg ${isActive ? active : inactive}`}
             >
               {l.label}
             </NavLink>

@@ -252,7 +252,7 @@ export default function Home() {
               <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-3xl mb-4 shadow-lg transform group-hover:scale-110 transition-transform duration-300">
               <span className="text-xl">👨‍💻</span>
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-3">Professional IT Support</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">IT Support</h3>
               <p className="text-gray-700 leading-relaxed">
                 We help home users and small businesses with reliable IT services, technical support, and smart technology solutions for daily needs.
               </p>
