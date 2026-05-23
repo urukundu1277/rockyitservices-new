@@ -8,7 +8,6 @@ export default function Navbar() {
     { to: "/", label: "Home" },
     { to: "/services", label: "Services" },
     { to: "/contact", label: "Contact Us" },
-    { to: "/admin", label: "Admin" },
   ];
 
   const active = "text-green-400 font-semibold";

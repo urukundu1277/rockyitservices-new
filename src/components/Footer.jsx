@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import AdminLoginModal from './AdminLoginModal';
 
 export default function Footer() {
+  const [showAdmin, setShowAdmin] = useState(false);
+
+  const openAdmin = () => setShowAdmin(true);
+  const closeAdmin = () => setShowAdmin(false);
+
   return (
+    <>
     <footer className="bg-gray-900 text-gray-200 py-10 sm:py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10">
         <div>
@@ -63,10 +70,26 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-gray-800 mt-8 pt-6">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center text-xs sm:text-sm text-gray-400">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center text-xs sm:text-sm text-gray-400 relative">
           © {new Date().getFullYear()} Rocky IT Services. All rights reserved.
+
+          {/* Gear Icon - admin access (discreet) */}
+          <button
+            onClick={openAdmin}
+            aria-label="Open admin login"
+            className="absolute right-4 bottom-0 md:bottom-2 bg-white/6 hover:bg-white/10 text-gray-200 p-2 rounded-full shadow-md transition-opacity"
+            title="Admin"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11.049 2.927c.3-1.18 1.942-1.18 2.243 0a1.724 1.724 0 002.44 1.12c1.06-.61 2.36.38 1.92 1.52a1.724 1.724 0 00.46 1.9c.86.86.52 2.36-.66 2.83a1.724 1.724 0 00-1.08 1.63c0 1.19-1.45 1.53-2.31.67a1.724 1.724 0 00-1.95-.42c-1.14.44-2.13-.86-1.53-1.93a1.724 1.724 0 00.35-1.71c-.4-1.15.83-2.38 1.93-1.93a1.724 1.724 0 001.71.35c1.07-.6 2.37.39 1.93 1.53-.32.89.2 2.01 1.08 1.62 1.07-.51 1.33-1.78.67-2.3a1.724 1.724 0 00-1.63-1.08c-1.19 0-1.53-1.45-.67-2.31a1.724 1.724 0 00.42-1.95c-.47-1.18 1.97-1.21 2.58-.23z" />
+            </svg>
+          </button>
         </div>
       </div>
     </footer>
+
+    {/* Admin Login Modal */}
+    <AdminLoginModal isOpen={showAdmin} onClose={closeAdmin} />
+    </>
   );
 }

@@ -4,6 +4,9 @@ import axios from "axios";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
+// API base URL
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+
 export default function Admin() {
   const navigate = useNavigate();
   const [customers, setCustomers] = useState([]);
@@ -12,20 +15,60 @@ export default function Admin() {
   const [filterStatus, setFilterStatus] = useState("All");
   const [sortLatest, setSortLatest] = useState(true);
   const [compactView, setCompactView] = useState(false);
+  const [adminUser, setAdminUser] = useState(null);
 
   useEffect(() => {
-    // require admin authentication
-    const ok = localStorage.getItem('adminAuth') === 'true';
-    if (!ok) return navigate('/admin-login', { replace: true });
-    fetchCustomers();
+    // Check for admin token authentication
+    const token = localStorage.getItem('adminToken');
+    const userStr = localStorage.getItem('adminUser');
+    
+    if (!token) {
+      return navigate('/admin-login', { replace: true });
+    }
+    
+    // Parse admin user data
+    try {
+      if (userStr) setAdminUser(JSON.parse(userStr));
+    } catch (e) {
+      console.error('Failed to parse admin user:', e);
+    }
+    
+    // Verify token is still valid
+    verifyToken(token);
   }, []);
 
-  const fetchCustomers = async () => {
+  const verifyToken = async (token) => {
     try {
-      const res = await axios.get("https://rockyitservices-new.onrender.com/api/customers");
+      const res = await axios.get(`${API_BASE_URL}/admin/verify-token`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      if (!res.data.success) {
+        // Token invalid, redirect to login
+        localStorage.removeItem('adminToken');
+        localStorage.removeItem('adminUser');
+        return navigate('/admin-login', { replace: true });
+      }
+      
+      // Token valid, fetch customers
+      fetchCustomers(token);
+    } catch (error) {
+      console.error('Token verification failed:', error.message);
+      localStorage.removeItem('adminToken');
+      localStorage.removeItem('adminUser');
+      navigate('/admin-login', { replace: true });
+    }
+  };
+
+  const fetchCustomers = async (token) => {
+    const authToken = token || localStorage.getItem('adminToken');
+    try {
+      const res = await axios.get(`${API_BASE_URL}/customers`, {
+        headers: { Authorization: `Bearer ${authToken}` }
+      });
       setCustomers(res.data || []);
     } catch (error) {
-      console.log(error);
+      console.error('Failed to fetch customers:', error.message);
     } finally {
       setLoading(false);
     }
@@ -103,7 +146,7 @@ export default function Admin() {
               <div className="flex flex-wrap items-center gap-2 sm:gap-3 w-full sm:w-auto">
                 <button onClick={() => fetchCustomers()} className="flex-1 sm:flex-initial px-4 py-2 bg-green-600 text-white rounded-lg text-sm">Refresh</button>
                 <button onClick={() => setCompactView(v => !v)} className="flex-1 sm:flex-initial px-3 py-2 bg-gray-100 rounded-lg text-sm">{compactView ? 'Normal View' : 'Compact View'}</button>
-                <button onClick={() => { localStorage.removeItem('adminAuth'); navigate('/admin-login'); }} className="flex-1 sm:flex-initial px-4 py-2 bg-red-500 text-white rounded-lg text-sm">Logout</button>
+                <button onClick={() => { localStorage.removeItem('adminToken'); localStorage.removeItem('adminUser'); navigate('/admin-login'); }} className="flex-1 sm:flex-initial px-4 py-2 bg-red-500 text-white rounded-lg text-sm">Logout</button>
               </div>
             </div>
         </div>

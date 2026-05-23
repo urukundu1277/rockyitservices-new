@@ -10,9 +10,13 @@ connectDB();
 
 const app = express();
 
-// Production CORS Configuration
+// CORS Configuration
 app.use(cors({
   origin: [
+    "http://localhost:5173",
+    "http://localhost:3000",
+    "http://127.0.0.1:5173",
+    "http://127.0.0.1:3000",
     "https://rockyitservices.com",
     "https://www.rockyitservices.com"
   ],
@@ -57,6 +61,12 @@ app.use(
 app.use(
     "/api/lead",
     require("./routes/leadRoutes")
+);
+
+// Admin authentication routes (Telegram OTP)
+app.use(
+    "/api/admin",
+    require("./routes/adminAuthRoutes")
 );
 
 // Test endpoint for Telegram
