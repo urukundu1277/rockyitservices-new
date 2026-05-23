@@ -33,7 +33,7 @@ export default function Hero({ openBooking }){
             </div>
           </div>
 
-          <div className="relative flex items-center justify-center min-h-[400px] sm:min-h-[450px] md:min-h-[500px] lg:min-h-[550px] py-8 lg:py-0 px-4">
+          <div className="relative flex items-center justify-center w-full h-auto md:h-screen md:min-h-[500px] py-8 lg:py-0 px-4">
             <ImageSlider />
           </div>
         </div>
