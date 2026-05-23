@@ -8,11 +8,11 @@ export default function Hero({ openBooking }){
         {/* Mobile-first responsive grid: stack vertically on mobile, side-by-side on desktop */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 items-center">
           
-          {/* Left Column: Text Content */}
-          <div className="text-gray-900 order-2 lg:order-1">
+          {/* Left Column: Text Content - Always first on all screens */}
+          <div className="text-gray-900 order-1">
             <div className="mb-4">
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight text-gray-900">
-                Rocky IT Services
+                ROCKY IT SERVICES
               </h1>
               <p className="text-base sm:text-lg md:text-xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-violet-600 mt-2">
                 IT Support & Managed Services
@@ -21,7 +21,7 @@ export default function Hero({ openBooking }){
             
             <div className="mt-6 space-y-3 text-base sm:text-lg text-gray-700">
               <p>
-                At Rocky IT Services, our goal is to support businesses and individuals with reliable and modern IT solutions. 
+                Rocky IT Services, our goal is to support businesses and individuals with reliable and modern IT solutions. 
                 We help clients improve productivity, business growth, and digital presence through smart technology services.
               </p>
 
@@ -52,8 +52,8 @@ export default function Hero({ openBooking }){
             </div>
           </div>
 
-          {/* Right Column: Image Slider */}
-          <div className="w-full order-1 lg:order-2">
+          {/* Right Column: Image Slider - Always second on all screens */}
+          <div className="w-full order-2">
             <ImageSlider />
           </div>
         </div>
