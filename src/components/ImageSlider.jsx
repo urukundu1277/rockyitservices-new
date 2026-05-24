@@ -1,33 +1,34 @@
-import React, { useState, useEffect } from 'react';
+// src/components/ImageSlider.jsx
+
+import React, { useEffect, useState } from 'react';
 import { sliderImages } from '../config/imageConfig';
 import './ImageSlider.css';
 
 export default function ImageSlider() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [loadedImages, setLoadedImages] = useState({});
   const [isHovering, setIsHovering] = useState(false);
-  const [images, setImages] = useState(sliderImages);
 
+  // Auto Slide
   useEffect(() => {
-    console.log('ImageSlider loaded with images:', sliderImages);
-  }, []);
-
-  // Auto-rotate carousel every 3.5 seconds (unless hovering)
-  useEffect(() => {
-    if (images.length === 0 || isHovering) return;
+    if (sliderImages.length <= 1 || isHovering) return;
 
     const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+      setCurrentIndex((prev) => {
+        return (prev + 1) % sliderImages.length;
+      });
     }, 3500);
 
     return () => clearInterval(interval);
-  }, [isHovering, images.length]);
+  }, [isHovering]);
 
-  if (images.length === 0) {
+  // Empty State
+  if (!sliderImages || sliderImages.length === 0) {
     return (
       <div className="image-slider-wrapper">
         <div className="image-slider">
           <div className="slider-placeholder">
-            <p>No images available</p>
+            <p>No Images Available</p>
           </div>
         </div>
       </div>
@@ -35,27 +36,62 @@ export default function ImageSlider() {
   }
 
   return (
-    <div 
+    <div
       className="image-slider-wrapper"
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
     >
       <div className="image-slider">
-        {images.map((image, index) => (
+        {sliderImages.map((image, index) => (
           <div
-            key={image.src}
-            className={`image-slide ${index === currentIndex ? 'active' : ''}`}
+            key={image.id}
+            className={`image-slide ${
+              index === currentIndex ? 'active' : ''
+            }`}
           >
+            {!loadedImages[index] && (
+              <div className="image-loader">
+                <div className="spinner"></div>
+              </div>
+            )}
+
             <img
               src={image.src}
               alt={image.alt}
-              loading="lazy"
-              onLoad={() => console.log(`✓ Loaded: ${image.src}`)}
+              loading={index === 0 ? 'eager' : 'lazy'}
+              decoding="async"
+              draggable="false"
+              className={loadedImages[index] ? 'loaded' : 'loading'}
+              onLoad={() => {
+                setLoadedImages((prev) => ({
+                  ...prev,
+                  [index]: true,
+                }));
+              }}
               onError={(e) => {
-                console.error(`✗ Failed to load: ${image.src}`);
+                e.target.src =
+                  'https://via.placeholder.com/1200x700?text=Image+Not+Found';
+
+                setLoadedImages((prev) => ({
+                  ...prev,
+                  [index]: true,
+                }));
               }}
             />
           </div>
+        ))}
+      </div>
+
+      {/* Slider Dots */}
+      <div className="slider-dots">
+        {sliderImages.map((_, index) => (
+          <button
+            key={index}
+            className={`dot ${
+              index === currentIndex ? 'active-dot' : ''
+            }`}
+            onClick={() => setCurrentIndex(index)}
+          />
         ))}
       </div>
     </div>

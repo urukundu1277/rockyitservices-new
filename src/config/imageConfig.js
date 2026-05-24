@@ -1,18 +1,31 @@
+// src/config/imageConfig.js
+
 /**
- * Image Configuration File
- * List all available images from the /public/Images folder
- * Update this whenever you add new images to the Images folder
+ * Automatically loads all images from:
+ * src/assets/slider-images
  */
 
-export const sliderImages = [
+const imageModules = import.meta.glob(
+  '/src/assets/slider-images/*.{png,jpg,jpeg,svg,webp,gif}',
   {
-    src: '/Images/RIS_logo.png',
-    alt: 'Rocky IT Services Logo',
-  },
-  {
-    src: '/Images/services.jpeg',
-    alt: 'Services Image',
-  },
-];
+    eager: true,
+    import: 'default',
+  }
+);
+
+export const sliderImages = Object.entries(imageModules)
+  .sort(([a], [b]) => a.localeCompare(b))
+  .map(([path, src]) => {
+    const fileName =
+      path.split('/').pop()?.replace(/\.[^/.]+$/, '') || 'Image';
+
+    return {
+      id: path,
+      src,
+      alt: fileName
+        .replace(/[-_]/g, ' ')
+        .replace(/\b\w/g, (char) => char.toUpperCase()),
+    };
+  });
 
 export default sliderImages;
