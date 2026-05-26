@@ -10,16 +10,19 @@ export default function Hero({ openBooking }){
           
           {/* Left Column: Text Content - Always first on all screens */}
           <div className="text-gray-900 order-1">
-            <div className="mb-4">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight text-gray-900">
-                ROCKY IT SERVICES
-              </h1>
-              <p className="text-base sm:text-lg md:text-xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-violet-600 mt-2">
-                IT Support & Managed Services
-              </p>
-            </div>
-            
-            <div className="mt-6 space-y-3 text-base sm:text-lg text-gray-700">
+            <div className="mb-2 leading-none">
+  
+  <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900">
+    ROCKY IT SERVICES
+  </h1>
+
+  <p className="text-base sm:text-lg md:text-xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-violet-600 mt-0">
+    IT Support &amp; Managed Services
+  </p>
+
+</div>
+
+<div className="mt-6 space-y-3 text-base sm:text-lg text-gray-700">
               <p>
                 Rocky IT Services, our goal is to support businesses and individuals with reliable and modern IT solutions. 
                 We help clients improve productivity, business growth, and digital presence through smart technology services.
