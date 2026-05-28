@@ -87,7 +87,12 @@ export default function Admin() {
     const prev = customers;
     setCustomers((s) => s.map((c) => (c._id === id ? { ...c, status: newStatus } : c)));
     try {
-      await axios.patch(`https://rockyitservices-new.onrender.com/api/customers/${id}/status`, { status: newStatus });
+      const authToken = localStorage.getItem('adminToken');
+      await axios.patch(
+        `${API_BASE_URL}/customers/${id}/status`,
+        { status: newStatus },
+        { headers: { Authorization: `Bearer ${authToken}` } }
+      );
     } catch (err) {
       console.error(err);
       setCustomers(prev);
@@ -151,7 +156,7 @@ export default function Admin() {
             </div>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mt-8">
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6 mt-8">
           <div className="bg-gradient-to-br from-white to-gray-50 p-4 sm:p-6 rounded-2xl shadow">
             <div className="text-sm text-gray-500">Total Requests</div>
             <div className="text-2xl sm:text-3xl font-bold mt-2">{customers.length}</div>
@@ -159,6 +164,10 @@ export default function Admin() {
           <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 p-4 sm:p-6 rounded-2xl shadow">
             <div className="text-sm text-gray-500">New Leads</div>
             <div className="text-2xl sm:text-3xl font-bold mt-2 text-yellow-600">{customers.filter(c => (c.status || 'New Lead') === 'New Lead').length}</div>
+          </div>
+          <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 sm:p-6 rounded-2xl shadow">
+            <div className="text-sm text-gray-500">Contacted</div>
+            <div className="text-2xl sm:text-3xl font-bold mt-2 text-blue-600">{customers.filter(c => (c.status || 'New Lead') === 'Contacted').length}</div>
           </div>
           <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 p-4 sm:p-6 rounded-2xl shadow">
             <div className="text-sm text-gray-500">Follow Ups</div>
