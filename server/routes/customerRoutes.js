@@ -91,4 +91,20 @@ router.patch("/:id/status", async (req, res) => {
     }
 });
 
+/* DELETE CUSTOMER */
+router.delete("/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const customer = await Customer.findByIdAndDelete(id);
+
+        if (!customer) return res.status(404).json({ message: "Customer not found" });
+
+        res.json({ success: true, message: "Customer deleted successfully" });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: error.message });
+    }
+});
+
 module.exports = router;

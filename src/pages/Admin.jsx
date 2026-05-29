@@ -15,6 +15,11 @@ export default function Admin() {
   const [filterStatus, setFilterStatus] = useState("All");
   const [sortLatest, setSortLatest] = useState(true);
   const [compactView, setCompactView] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [deletingIds, setDeletingIds] = useState([]);
   const [adminUser, setAdminUser] = useState(null);
 
   useEffect(() => {
@@ -96,7 +101,32 @@ export default function Admin() {
     } catch (err) {
       console.error(err);
       setCustomers(prev);
-      alert('Failed to update status');
+      setErrorMessage(err?.response?.data?.message || 'Failed to update status');
+      setShowError(true);
+    }
+  };
+
+  const deleteCustomer = async (id) => {
+    if (!window.confirm('Delete this customer request permanently?')) return;
+    if (deletingIds.includes(id)) return;
+
+    setDeletingIds((ids) => [...ids, id]);
+
+    try {
+      const authToken = localStorage.getItem('adminToken');
+      const res = await axios.delete(`${API_BASE_URL}/customers/${id}`, {
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
+
+      setCustomers((s) => s.filter((c) => c._id !== id));
+      setSuccessMessage(res.data?.message || 'Customer deleted successfully');
+      setShowSuccess(true);
+    } catch (err) {
+      console.error(err);
+      setErrorMessage(err?.response?.data?.message || err.message || 'Failed to delete customer');
+      setShowError(true);
+    } finally {
+      setDeletingIds((ids) => ids.filter((currentId) => currentId !== id));
     }
   };
 
@@ -117,6 +147,18 @@ export default function Admin() {
     const url = `https://wa.me/${waNum}?text=${encodeURIComponent(message)}`;
     window.open(url, '_blank', 'noopener');
   };
+
+  useEffect(() => {
+    if (showSuccess || showError) {
+      const timer = setTimeout(() => {
+        setShowSuccess(false);
+        setShowError(false);
+        setSuccessMessage("");
+        setErrorMessage("");
+      }, 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [showSuccess, showError]);
 
   const filtered = customers
     .filter((c) => {
@@ -145,8 +187,39 @@ export default function Admin() {
             <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">Admin Dashboard</h1>
             <p className="text-gray-600 mt-1">Manage customer leads and support requests</p>
           </div>
+          <div className="hidden lg:block" />
+        </div>
 
-            <div className="flex flex-wrap items-center gap-2 sm:gap-3 w-full lg:w-auto">
+        {(showSuccess || showError) && (
+          <div className="fixed top-4 left-4 right-4 z-50 mx-auto w-auto max-w-sm space-y-3 sm:right-5 sm:left-auto">
+            {showSuccess && (
+              <div className="flex items-start gap-3 rounded-3xl border border-emerald-200 bg-emerald-50 px-4 py-4 shadow-xl shadow-emerald-200/50">
+                <div className="mt-0.5 h-10 w-10 flex-shrink-0 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-lg font-semibold">✓</div>
+                <div className="flex-1">
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="text-sm font-semibold text-emerald-900">Deleted successfully</div>
+                    <button onClick={() => setShowSuccess(false)} className="text-emerald-700 hover:text-emerald-900">×</button>
+                  </div>
+                  <p className="mt-1 text-sm text-emerald-800">{successMessage}</p>
+                </div>
+              </div>
+            )}
+            {showError && (
+              <div className="flex items-start gap-3 rounded-3xl border border-red-200 bg-red-50 px-4 py-4 shadow-xl shadow-red-200/50">
+                <div className="mt-0.5 h-10 w-10 flex-shrink-0 rounded-2xl bg-red-100 text-red-700 flex items-center justify-center text-lg font-semibold">!</div>
+                <div className="flex-1">
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="text-sm font-semibold text-red-900">Action failed</div>
+                    <button onClick={() => setShowError(false)} className="text-red-700 hover:text-red-900">×</button>
+                  </div>
+                  <p className="mt-1 text-sm text-red-800">{errorMessage}</p>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 w-full lg:w-auto">
               <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search by name, email, phone or requirement" className="border border-gray-200 rounded-lg px-4 py-2 w-full sm:w-72" />
               <div className="flex flex-wrap items-center gap-2 sm:gap-3 w-full sm:w-auto">
                 <button onClick={() => fetchCustomers()} className="flex-1 sm:flex-initial px-4 py-2 bg-green-600 text-white rounded-lg text-sm">Refresh</button>
@@ -154,7 +227,6 @@ export default function Admin() {
                 <button onClick={() => { localStorage.removeItem('adminToken'); localStorage.removeItem('adminUser'); navigate('/admin-login'); }} className="flex-1 sm:flex-initial px-4 py-2 bg-red-500 text-white rounded-lg text-sm">Logout</button>
               </div>
             </div>
-        </div>
 
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6 mt-8">
           <div className="bg-gradient-to-br from-white to-gray-50 p-4 sm:p-6 rounded-2xl shadow">
@@ -257,6 +329,17 @@ export default function Admin() {
                                   <path d="M17.57 14.33c-.28-.14-1.64-.81-1.9-.9-.26-.09-.45-.14-.64.14-.19.28-.73.9-.9 1.09-.16.19-.32.21-.6.07-.28-.14-1.18-.43-2.25-1.39-.83-.74-1.39-1.66-1.55-1.94-.16-.28-.02-.43.12-.57.12-.12.28-.32.42-.48.14-.16.19-.28.28-.46.09-.19.05-.36-.02-.5-.07-.14-.64-1.54-.88-2.12-.23-.56-.47-.48-.64-.49-.17-.01-.36-.01-.55-.01-.19 0-.5.07-.76.36-.26.29-1 1-1 2.43 0 1.44 1.03 2.84 1.17 3.04.14.2 2.03 3.12 4.92 4.37 3.05 1.31 3.05.87 3.6.82.55-.05 1.79-.73 2.04-1.44.24-.71.24-1.32.17-1.45-.07-.13-.26-.21-.55-.35z" fill="white" />
                                 </svg>
                                 <span className={`${compactView ? 'text-xs' : 'text-sm'}`}>Chat on WhatsApp</span>
+                              </button>
+                              <button
+                                onClick={() => deleteCustomer(customer._id)}
+                                disabled={deletingIds.includes(customer._id)}
+                                className={`flex items-center gap-2 ${compactView ? 'px-2 py-1 text-xs' : 'px-3 py-2'} ${deletingIds.includes(customer._id) ? 'bg-red-300 cursor-not-allowed' : 'bg-red-500 hover:bg-red-600'} text-white rounded-lg transition`}
+                              >
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                                  <path d="M9 3a1 1 0 00-1 1v1H4a1 1 0 000 2h16a1 1 0 000-2h-4V4a1 1 0 00-1-1H9z" />
+                                  <path fillRule="evenodd" d="M5 8a1 1 0 011-1h12a1 1 0 011 1v11a2 2 0 01-2 2H7a2 2 0 01-2-2V8zm3 2a1 1 0 00-1 1v7a1 1 0 102 0v-7a1 1 0 00-1-1zm5 0a1 1 0 00-1 1v7a1 1 0 102 0v-7a1 1 0 00-1-1z" clipRule="evenodd" />
+                                </svg>
+                                <span className={`${compactView ? 'text-xs' : 'text-sm'}`}>{deletingIds.includes(customer._id) ? 'Deleting...' : 'Delete'}</span>
                               </button>
                             </div>
                           </td>
