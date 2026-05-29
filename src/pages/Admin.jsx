@@ -297,17 +297,15 @@ export default function Admin() {
                       <tbody>
                         {filtered.map((customer) => (
                           <tr key={customer._id} className="border-b hover:bg-gray-50 transition">
-                            <td className={`${compactView ? 'p-2 text-sm' : 'p-4 font-medium'}`}>{customer.name}</td>
-                            <td className={`${compactView ? 'p-2 text-sm' : 'p-4'}`}>
-                              <div className="flex items-center gap-3">
-                                <div className="text-sm text-gray-700">{customer.whatsappNumber || '-'}</div>
-                              </div>
+                            <td className={`${compactView ? 'p-2 text-sm' : 'p-4 font-medium'} whitespace-nowrap max-w-[140px]`}><div className="truncate">{customer.name}</div></td>
+                            <td className={`${compactView ? 'p-2 text-sm' : 'p-4'} whitespace-nowrap max-w-[120px]`}>
+                              <div className="truncate text-sm text-gray-700">{customer.whatsappNumber || '-'}</div>
                             </td>
-                            <td className={`${compactView ? 'p-2 text-sm' : 'p-4'}`}>{customer.phone}</td>
-                            <td className={`${compactView ? 'p-2 text-sm' : 'p-4'}`}>{customer.email}</td>
-                            <td className={`${compactView ? 'p-2 text-sm max-w-[18rem] truncate' : 'p-4 max-w-xl truncate'}`}>{customer.requirement}</td>
-                            <td className={`${compactView ? 'p-2 text-sm' : 'p-4'}`}>{new Date(customer.createdAt).toLocaleString()}</td>
-                            <td className={`${compactView ? 'p-2' : 'p-4'}`}>
+                            <td className={`${compactView ? 'p-2 text-sm' : 'p-4'} whitespace-nowrap max-w-[110px]`}><div className="truncate">{customer.phone}</div></td>
+                            <td className={`${compactView ? 'p-2 text-sm' : 'p-4'} whitespace-nowrap max-w-[160px]`}><div className="truncate">{customer.email}</div></td>
+                            <td className={`${compactView ? 'p-2 text-sm' : 'p-4'} whitespace-nowrap max-w-[180px]`}><div className="truncate">{customer.requirement}</div></td>
+                            <td className={`${compactView ? 'p-2 text-sm' : 'p-4'} whitespace-nowrap max-w-[140px]`}><div className="truncate">{new Date(customer.createdAt).toLocaleString()}</div></td>
+                            <td className={`${compactView ? 'p-2' : 'p-4'} whitespace-nowrap`}>
                               <div className="flex flex-wrap items-center gap-3">
                                 <span className={`px-3 py-1 rounded-full text-sm font-semibold ${statusClasses[customer.status || 'New Lead'] || 'bg-gray-100 text-gray-800'}`}>{customer.status || 'New Lead'}</span>
                                 <select value={customer.status || 'New Lead'} onChange={(e)=>updateStatus(customer._id, e.target.value)} className="border border-gray-200 rounded px-2 py-1 text-sm">
@@ -315,25 +313,25 @@ export default function Admin() {
                                 </select>
                               </div>
                             </td>
-                            <td className={`${compactView ? 'p-2' : 'p-4'}`}>
+                            <td className={`${compactView ? 'p-2' : 'p-4'} whitespace-nowrap`}> 
                               <div className="flex flex-wrap gap-2">
-                                <button onClick={() => openWhatsApp(customer.whatsappNumber, customer)} className={`flex items-center gap-2 ${compactView ? 'px-2 py-1 text-xs' : 'px-3 py-2'} bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg transition`}>
-                                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                                <button onClick={() => openWhatsApp(customer.whatsappNumber, customer)} className={`flex items-center gap-2 ${compactView ? 'px-2 py-1 text-xs' : 'px-2 py-1 sm:px-3 sm:py-2'} bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg transition`}>
+                                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 sm:w-5 sm:h-5">
                                     <path d="M20.52 3.48A11.95 11.95 0 0012.01 0C5.38 0 .03 5.35.03 12c0 2.13.56 4.15 1.62 5.93L0 24l6.32-1.65A11.96 11.96 0 0012 24c6.62 0 11.97-5.35 11.97-12 0-1.98-.48-3.84-1.45-5.52zM12 22.2c-1.2 0-2.38-.3-3.42-.87l-.25-.13-3.76.98.99-3.66-.13-.27A9.35 9.35 0 012.65 12 9.35 9.35 0 0112 2.65 9.35 9.35 0 0121.35 12 9.35 9.35 0 0112 22.2z" />
                                     <path d="M17.57 14.33c-.28-.14-1.64-.81-1.9-.9-.26-.09-.45-.14-.64.14-.19.28-.73.9-.9 1.09-.16.19-.32.21-.6.07-.28-.14-1.18-.43-2.25-1.39-.83-.74-1.39-1.66-1.55-1.94-.16-.28-.02-.43.12-.57.12-.12.28-.32.42-.48.14-.16.19-.28.28-.46.09-.19.05-.36-.02-.5-.07-.14-.64-1.54-.88-2.12-.23-.56-.47-.48-.64-.49-.17-.01-.36-.01-.55-.01-.19 0-.5.07-.76.36-.26.29-1 1-1 2.43 0 1.44 1.03 2.84 1.17 3.04.14.2 2.03 3.12 4.92 4.37 3.05 1.31 3.05.87 3.6.82.55-.05 1.79-.73 2.04-1.44.24-.71.24-1.32.17-1.45-.07-.13-.26-.21-.55-.35z" fill="white" />
                                   </svg>
-                                  <span className={`${compactView ? 'text-xs' : 'text-sm'}`}>Chat</span>
+                                  <span className={`${compactView ? 'text-xs' : 'text-sm'} hidden sm:inline`}>Chat</span>
                                 </button>
                                 <button
                                   onClick={() => deleteCustomer(customer._id)}
                                   disabled={deletingIds.includes(customer._id)}
-                                  className={`flex items-center gap-2 ${compactView ? 'px-2 py-1 text-xs' : 'px-3 py-2'} ${deletingIds.includes(customer._id) ? 'bg-red-300 cursor-not-allowed' : 'bg-red-500 hover:bg-red-600'} text-white rounded-lg transition`}
+                                  className={`flex items-center gap-2 ${compactView ? 'px-2 py-1 text-xs' : 'px-2 py-1 sm:px-3 sm:py-2'} ${deletingIds.includes(customer._id) ? 'bg-red-300 cursor-not-allowed' : 'bg-red-500 hover:bg-red-600'} text-white rounded-lg transition`}
                                 >
-                                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 sm:w-5 sm:h-5">
                                     <path d="M9 3a1 1 0 00-1 1v1H4a1 1 0 000 2h16a1 1 0 000-2h-4V4a1 1 0 00-1-1H9z" />
                                     <path fillRule="evenodd" d="M5 8a1 1 0 011-1h12a1 1 0 011 1v11a2 2 0 01-2 2H7a2 2 0 01-2-2V8zm3 2a1 1 0 00-1 1v7a1 1 0 102 0v-7a1 1 0 00-1-1zm5 0a1 1 0 00-1 1v7a1 1 0 102 0v-7a1 1 0 00-1-1z" clipRule="evenodd" />
                                   </svg>
-                                  <span className={`${compactView ? 'text-xs' : 'text-sm'}`}>{deletingIds.includes(customer._id) ? 'Deleting...' : 'Delete'}</span>
+                                  <span className={`${compactView ? 'text-xs' : 'text-sm'} hidden sm:inline`}>{deletingIds.includes(customer._id) ? 'Deleting...' : 'Delete'}</span>
                                 </button>
                               </div>
                             </td>
