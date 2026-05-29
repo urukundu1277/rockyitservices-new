@@ -24,11 +24,9 @@ router.post("/", async (req, res) => {
 
     const text = formatTelegramMessage({ ...payload, source: "Service Booking" });
 
-    try {
-      await sendTelegramMessage(text);
-    } catch (tgErr) {
+    sendTelegramMessage(text).catch((tgErr) => {
       console.error("Telegram notification failed for /api/booking:", tgErr.message || tgErr);
-    }
+    });
 
     return res.status(201).json({ success: true, data: saved || req.body });
   } catch (error) {

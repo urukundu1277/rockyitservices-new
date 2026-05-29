@@ -42,17 +42,17 @@ router.post("/register", async (req, res) => {
         const customer =
             await Customer.create(req.body);
 
-        // Send Telegram notification, but don't block response on failure
+        // Send Telegram notification in the background so the API responds fast
         try {
             const savedObj = (customer && typeof customer.toObject === 'function') ? customer.toObject() : (customer || {});
-            // Merge saved document with original request body so we include fields
-            // that are not part of the Mongoose schema (e.g., serviceType, description).
             const payload = { ...savedObj, ...req.body };
             const text = formatTelegramMessage({ ...payload, source: "New Customer Registration" });
 
-            await sendTelegramMessage(text);
+            sendTelegramMessage(text).catch((tgErr) => {
+                console.error("Telegram notification failed for customer register:", tgErr.message || tgErr);
+            });
         } catch (tgErr) {
-            console.error("Telegram notification failed for customer register:", tgErr.message || tgErr);
+            console.error("Failed to start background Telegram notification:", tgErr.message || tgErr);
         }
 
         res.status(201).json(customer);
