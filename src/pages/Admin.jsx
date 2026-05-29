@@ -259,7 +259,7 @@ export default function Admin() {
                   {statuses.map(s => <option key={s} value={s}>{s}</option>)}
                 </select>
                 <button onClick={() => setSortLatest(s => !s)} className="flex-1 sm:flex-initial px-3 py-2 bg-gray-100 rounded-lg text-sm">{sortLatest ? 'Sort: Latest' : 'Sort: Natural'}</button>
-                <button onClick={() => setCompactView(v => !v)} className="flex-1 sm:flex-initial px-3 py-2 bg-gray-100 rounded-lg hidden md:inline text-sm">{compactView ? 'Normal View' : 'Compact View'}</button>
+                <button onClick={() => setCompactView(v => !v)} className="flex-1 sm:flex-initial px-3 py-2 bg-gray-100 rounded-lg text-sm">{compactView ? 'Normal View' : 'Compact View'}</button>
                 <button onClick={() => fetchCustomers()} className="flex-1 sm:flex-initial px-4 py-2 bg-green-600 text-white rounded-lg text-sm">Refresh</button>
               </div>
             </div>
@@ -280,7 +280,7 @@ export default function Admin() {
                 </div>
               ) : (
                 <>
-                  <div className="hidden lg:block overflow-x-auto">
+                  <div className="overflow-x-auto">
                     <table className={`w-full text-left ${compactView ? 'text-sm min-w-0' : 'min-w-[720px]'} rounded-lg overflow-hidden table-auto`}>
                       <thead className="bg-gradient-to-r from-gray-100 to-white">
                         <tr className="text-sm text-gray-600">
@@ -308,7 +308,7 @@ export default function Admin() {
                             <td className={`${compactView ? 'p-2 text-sm max-w-[18rem] truncate' : 'p-4 max-w-xl truncate'}`}>{customer.requirement}</td>
                             <td className={`${compactView ? 'p-2 text-sm' : 'p-4'}`}>{new Date(customer.createdAt).toLocaleString()}</td>
                             <td className={`${compactView ? 'p-2' : 'p-4'}`}>
-                              <div className="flex items-center gap-3">
+                              <div className="flex flex-wrap items-center gap-3">
                                 <span className={`px-3 py-1 rounded-full text-sm font-semibold ${statusClasses[customer.status || 'New Lead'] || 'bg-gray-100 text-gray-800'}`}>{customer.status || 'New Lead'}</span>
                                 <select value={customer.status || 'New Lead'} onChange={(e)=>updateStatus(customer._id, e.target.value)} className="border border-gray-200 rounded px-2 py-1 text-sm">
                                   {statuses.map(s => <option key={s} value={s}>{s}</option>)}
@@ -341,55 +341,6 @@ export default function Admin() {
                         ))}
                       </tbody>
                     </table>
-                  </div>
-
-                  <div className="space-y-4 lg:hidden">
-                    {filtered.map((customer) => (
-                      <div key={customer._id} className="rounded-3xl border border-gray-200 bg-white p-4 shadow-sm">
-                        <div className="flex items-start justify-between gap-4">
-                          <div>
-                            <div className="text-base font-semibold text-gray-900">{customer.name}</div>
-                            <div className="mt-1 text-sm text-gray-500">{customer.email || 'No email provided'}</div>
-                          </div>
-                          <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${statusClasses[customer.status || 'New Lead'] || 'bg-gray-100 text-gray-800'}`}>
-                            {customer.status || 'New Lead'}
-                          </span>
-                        </div>
-
-                        <div className="mt-4 grid gap-2 text-sm text-gray-600">
-                          <div>
-                            <div className="font-medium text-gray-700">WhatsApp</div>
-                            <div className="mt-1 text-gray-500">{customer.whatsappNumber || '-'}</div>
-                          </div>
-                          <div>
-                            <div className="font-medium text-gray-700">Phone</div>
-                            <div className="mt-1 text-gray-500">{customer.phone || '-'}</div>
-                          </div>
-                          <div>
-                            <div className="font-medium text-gray-700">Requested</div>
-                            <div className="mt-1 text-gray-500">{new Date(customer.createdAt).toLocaleString()}</div>
-                          </div>
-                          <div>
-                            <div className="font-medium text-gray-700">Service / Issue</div>
-                            <div className="mt-1 text-gray-500 break-words">{customer.requirement || '-'}</div>
-                          </div>
-                        </div>
-
-                        <div className="mt-4 flex flex-col gap-2">
-                          <select value={customer.status || 'New Lead'} onChange={(e)=>updateStatus(customer._id, e.target.value)} className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700">
-                            {statuses.map((s) => (
-                              <option key={s} value={s}>{s}</option>
-                            ))}
-                          </select>
-                          <button onClick={() => openWhatsApp(customer.whatsappNumber, customer)} className="w-full rounded-lg bg-emerald-500 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-600">
-                            Chat on WhatsApp
-                          </button>
-                          <button onClick={() => deleteCustomer(customer._id)} disabled={deletingIds.includes(customer._id)} className={`w-full rounded-lg px-4 py-3 text-sm font-semibold text-white transition ${deletingIds.includes(customer._id) ? 'bg-red-300 cursor-not-allowed' : 'bg-red-500 hover:bg-red-600'}`}>
-                            {deletingIds.includes(customer._id) ? 'Deleting...' : 'Delete request'}
-                          </button>
-                        </div>
-                      </div>
-                    ))}
                   </div>
                 </>
               )}
