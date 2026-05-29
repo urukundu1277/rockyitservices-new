@@ -23,39 +23,36 @@ export default function Admin() {
   const [adminUser, setAdminUser] = useState(null);
 
   useEffect(() => {
-    // Check for admin token authentication
     const token = localStorage.getItem('adminToken');
     const userStr = localStorage.getItem('adminUser');
-    
+
     if (!token) {
       return navigate('/admin-login', { replace: true });
     }
-    
-    // Parse admin user data
-    try {
-      if (userStr) setAdminUser(JSON.parse(userStr));
-    } catch (e) {
-      console.error('Failed to parse admin user:', e);
-    }
-    
-    // Verify token is still valid
-    verifyToken(token);
+
+    verifyToken(token, userStr);
   }, []);
 
-  const verifyToken = async (token) => {
+  const verifyToken = async (token, userStr) => {
     try {
       const res = await axios.get(`${API_BASE_URL}/admin/verify-token`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      
+
       if (!res.data.success) {
-        // Token invalid, redirect to login
         localStorage.removeItem('adminToken');
         localStorage.removeItem('adminUser');
         return navigate('/admin-login', { replace: true });
       }
-      
-      // Token valid, fetch customers
+
+      if (userStr) {
+        try {
+          setAdminUser(JSON.parse(userStr));
+        } catch (e) {
+          setAdminUser(userStr);
+        }
+      }
+
       fetchCustomers(token);
     } catch (error) {
       console.error('Token verification failed:', error.message);
@@ -66,8 +63,8 @@ export default function Admin() {
   };
 
   const fetchCustomers = async (token) => {
-    const authToken = token || localStorage.getItem('adminToken');
     try {
+      const authToken = token || localStorage.getItem('adminToken');
       const res = await axios.get(`${API_BASE_URL}/customers`, {
         headers: { Authorization: `Bearer ${authToken}` }
       });
@@ -115,7 +112,7 @@ export default function Admin() {
     try {
       const authToken = localStorage.getItem('adminToken');
       const res = await axios.delete(`${API_BASE_URL}/customers/${id}`, {
-        headers: { Authorization: `Bearer ${authToken}` },
+        headers: { Authorization: `Bearer ${authToken}` }
       });
 
       setCustomers((s) => s.filter((c) => c._id !== id));
@@ -182,12 +179,17 @@ export default function Admin() {
       <Navbar />
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">Admin Dashboard</h1>
             <p className="text-gray-600 mt-1">Manage customer leads and support requests</p>
           </div>
-          <div className="hidden lg:block" />
+          <button
+            onClick={() => { localStorage.removeItem('adminToken'); localStorage.removeItem('adminUser'); navigate('/admin-login'); }}
+            className="w-full sm:w-auto px-4 py-2 bg-red-500 text-white rounded-lg text-sm hover:bg-red-600 transition"
+          >
+            Logout
+          </button>
         </div>
 
         {(showSuccess || showError) && (
@@ -218,15 +220,6 @@ export default function Admin() {
             )}
           </div>
         )}
-
-        <div className="flex flex-wrap items-center gap-2 sm:gap-3 w-full lg:w-auto">
-              <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search by name, email, phone or requirement" className="border border-gray-200 rounded-lg px-4 py-2 w-full sm:w-72" />
-              <div className="flex flex-wrap items-center gap-2 sm:gap-3 w-full sm:w-auto">
-                <button onClick={() => fetchCustomers()} className="flex-1 sm:flex-initial px-4 py-2 bg-green-600 text-white rounded-lg text-sm">Refresh</button>
-                <button onClick={() => setCompactView(v => !v)} className="flex-1 sm:flex-initial px-3 py-2 bg-gray-100 rounded-lg text-sm">{compactView ? 'Normal View' : 'Compact View'}</button>
-                <button onClick={() => { localStorage.removeItem('adminToken'); localStorage.removeItem('adminUser'); navigate('/admin-login'); }} className="flex-1 sm:flex-initial px-4 py-2 bg-red-500 text-white rounded-lg text-sm">Logout</button>
-              </div>
-            </div>
 
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6 mt-8">
           <div className="bg-gradient-to-br from-white to-gray-50 p-4 sm:p-6 rounded-2xl shadow">

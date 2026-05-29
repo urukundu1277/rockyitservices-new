@@ -10,6 +10,7 @@ const router = express.Router();
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME || "admin";
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "#Uv@143@";
 
+
 // Generate a random 6-digit OTP
 function generateOTP() {
   return Math.floor(100000 + Math.random() * 900000).toString();
@@ -79,6 +80,60 @@ router.post("/request-otp", async (req, res) => {
 
   } catch (error) {
     console.error("Request OTP error:", error.message);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error"
+    });
+  }
+});
+
+/**
+ * POST /api/admin/login
+ * Direct username/password login for trusted devices
+ */
+router.post("/login", async (req, res) => {
+  try {
+    const { username, password } = req.body;
+
+
+    if (!username || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Username and password are required"
+      });
+    }
+
+    const isValidCredentials = username === ADMIN_USERNAME && password === ADMIN_PASSWORD;
+
+
+    if (!isValidCredentials) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid credentials"
+      });
+    }
+
+    const token = jwt.sign(
+      {
+        id: username,
+        role: "admin",
+        type: "admin_login"
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "24h" }
+    );
+
+    res.json({
+      success: true,
+      message: "Authentication successful",
+      token,
+      admin: {
+        username,
+        role: "admin"
+      }
+    });
+  } catch (error) {
+    console.error("Direct login error:", error.message);
     res.status(500).json({
       success: false,
       message: "Internal server error"
