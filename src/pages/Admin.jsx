@@ -179,6 +179,32 @@ export default function Admin() {
       <Navbar />
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
+        {/* Why Choose section restored from Home page */}
+        <div className="w-full py-8">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center mb-6">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-2">Why Choose Rocky IT Services?</h2>
+            <p className="text-gray-600 text-sm sm:text-base max-w-2xl mx-auto">We're dedicated to making technology simple and accessible for everyone.</p>
+          </div>
+
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 mt-6">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+              <div className="group relative rounded-2xl overflow-hidden bg-gradient-to-br from-blue-50 to-blue-100 p-6 sm:p-8 hover:shadow-2xl transition-all duration-300 border border-blue-200">
+                <div className="text-lg font-semibold text-blue-800">Experienced Engineers</div>
+                <p className="mt-2 text-sm text-gray-600">Certified professionals with years of hands-on experience delivering dependable IT solutions.</p>
+              </div>
+
+              <div className="group relative rounded-2xl overflow-hidden bg-gradient-to-br from-emerald-50 to-emerald-100 p-6 sm:p-8 hover:shadow-2xl transition-all duration-300 border border-emerald-200">
+                <div className="text-lg font-semibold text-emerald-800">Reliable Support</div>
+                <p className="mt-2 text-sm text-gray-600">Fast, friendly support and ongoing maintenance so your systems run smoothly.</p>
+              </div>
+
+              <div className="group relative rounded-2xl overflow-hidden bg-gradient-to-br from-yellow-50 to-yellow-100 p-6 sm:p-8 hover:shadow-2xl transition-all duration-300 border border-yellow-200">
+                <div className="text-lg font-semibold text-yellow-800">Cost Effective</div>
+                <p className="mt-2 text-sm text-gray-600">Competitive pricing and flexible plans tailored to businesses of all sizes.</p>
+              </div>
+            </div>
+          </div>
+        </div>
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">Admin Dashboard</h1>

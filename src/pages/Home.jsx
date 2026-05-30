@@ -260,6 +260,33 @@ export default function Home() {
         </div>
       </section>
 
+      {/* WHY CHOOSE */}
+      <section className="w-full py-16 sm:py-24 md:py-28">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center mb-8">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">Why Choose Rocky IT Services?</h2>
+          <p className="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto">We're dedicated to making technology simple and accessible for everyone.</p>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            <div className="group relative rounded-2xl overflow-hidden bg-gradient-to-br from-blue-50 to-blue-100 p-8 sm:p-10 hover:shadow-2xl transition-all duration-300 border border-blue-200">
+              <div className="text-xl font-semibold text-blue-800">Fast Response</div>
+              <p className="mt-3 text-sm text-gray-600">Our team is ready to assist with technical issues and support requests to minimize downtime and keep your business running.</p>
+            </div>
+
+            <div className="group relative rounded-2xl overflow-hidden bg-gradient-to-br from-emerald-50 to-emerald-100 p-8 sm:p-10 hover:shadow-2xl transition-all duration-300 border border-emerald-200">
+              <div className="text-xl font-semibold text-emerald-800">Trusted IT Solutions</div>
+              <p className="mt-3 text-sm text-gray-600">We provide reliable IT services to help businesses stay connected, secure, and productive. Our team is committed to delivering quality solutions that meet your needs.</p>
+            </div>
+
+            <div className="group relative rounded-2xl overflow-hidden bg-gradient-to-br from-yellow-50 to-yellow-100 p-8 sm:p-10 hover:shadow-2xl transition-all duration-300 border border-yellow-200">
+              <div className="text-xl font-semibold text-yellow-800">Remote Support</div>
+              <p className="mt-3 text-sm text-gray-600">Get fast and secure remote assistance from our IT experts. We quickly diagnose and resolve technical issues without the need for an on-site visit, helping you minimize downtime and keep your business running smoothly.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* BOOKING MODAL */}
       {showBooking && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
