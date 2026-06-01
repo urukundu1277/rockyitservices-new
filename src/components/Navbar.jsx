@@ -6,9 +6,19 @@ export default function Navbar() {
 
   const links = [
     { to: "/", label: "Home" },
+    { to: "#about", label: "About", isScrollLink: true },
     { to: "/services", label: "Services" },
     { to: "/contact", label: "Contact Us" },
   ];
+
+  const handleScrollToAbout = (e) => {
+    e.preventDefault();
+    const aboutSection = document.getElementById("about-section");
+    if (aboutSection) {
+      aboutSection.scrollIntoView({ behavior: "smooth", block: "start" });
+      setOpen(false);
+    }
+  };
 
   const active =
     "bg-gradient-to-r from-cyan-500 to-violet-600 text-white font-semibold px-5 py-2 rounded-full shadow-lg border border-white/30";
@@ -83,20 +93,33 @@ export default function Navbar() {
 
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-4 text-base">
-          {links.map((l) => (
-            <NavLink
-              key={l.to}
-              to={l.to}
-              end
-              className={({ isActive }) =>
-                `relative transition-all duration-300 backdrop-blur-md ${
-                  isActive ? active : inactive
-                }`
-              }
-            >
-              {l.label}
-            </NavLink>
-          ))}
+          {links.map((l) => {
+            if (l.isScrollLink) {
+              return (
+                <button
+                  key={l.to}
+                  onClick={handleScrollToAbout}
+                  className={`relative transition-all duration-300 backdrop-blur-md ${inactive} cursor-pointer`}
+                >
+                  {l.label}
+                </button>
+              );
+            }
+            return (
+              <NavLink
+                key={l.to}
+                to={l.to}
+                end
+                className={({ isActive }) =>
+                  `relative transition-all duration-300 backdrop-blur-md ${
+                    isActive ? active : inactive
+                  }`
+                }
+              >
+                {l.label}
+              </NavLink>
+            );
+          })}
         </div>
 
         {/* Mobile Button */}
@@ -150,22 +173,35 @@ export default function Navbar() {
         }`}
       >
         <div className="px-6 py-4 flex flex-col gap-3 border-t border-gray-300">
-          {links.map((l) => (
-            <NavLink
-              key={l.to}
-              to={l.to}
-              onClick={() => setOpen(false)}
-              className={({ isActive }) =>
-                `block px-4 py-3 rounded-2xl text-lg transition-all duration-300 ${
-                  isActive
-                    ? "bg-gradient-to-r from-cyan-500 to-violet-600 text-white shadow-lg"
-                    : "bg-white/70 text-gray-800 hover:bg-white"
-                }`
-              }
-            >
-              {l.label}
-            </NavLink>
-          ))}
+          {links.map((l) => {
+            if (l.isScrollLink) {
+              return (
+                <button
+                  key={l.to}
+                  onClick={handleScrollToAbout}
+                  className="block w-full text-left px-4 py-3 rounded-2xl text-lg transition-all duration-300 bg-white/70 text-gray-800 hover:bg-white cursor-pointer"
+                >
+                  {l.label}
+                </button>
+              );
+            }
+            return (
+              <NavLink
+                key={l.to}
+                to={l.to}
+                onClick={() => setOpen(false)}
+                className={({ isActive }) =>
+                  `block px-4 py-3 rounded-2xl text-lg transition-all duration-300 ${
+                    isActive
+                      ? "bg-gradient-to-r from-cyan-500 to-violet-600 text-white shadow-lg"
+                      : "bg-white/70 text-gray-800 hover:bg-white"
+                  }`
+                }
+              >
+                {l.label}
+              </NavLink>
+            );
+          })}
         </div>
       </div>
     </nav>
