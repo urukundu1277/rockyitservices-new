@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+require("dotenv").config();
 
 // Telegram notification helpers
 const {
@@ -16,6 +17,15 @@ const Review = (() => {
     return null;
   }
 })();
+
+// Environment variables for review configuration
+const REVIEW_REQUIRE_APPROVAL = process.env.REVIEW_REQUIRE_APPROVAL !== "false";
+const REVIEW_MAX_LIMIT = parseInt(process.env.REVIEW_MAX_LIMIT || "50", 10);
+
+// Log review configuration at startup
+console.log("[reviewRoutes] Configuration loaded:");
+console.log(`  - REVIEW_REQUIRE_APPROVAL: ${REVIEW_REQUIRE_APPROVAL}`);
+console.log(`  - REVIEW_MAX_LIMIT: ${REVIEW_MAX_LIMIT}`);
 
 // POST /api/reviews
 // Submit a new review
@@ -58,7 +68,7 @@ router.post("/", async (req, res) => {
           service,
           rating,
           message,
-          approved: false,
+          approved: !REVIEW_REQUIRE_APPROVAL, // Auto-approve if REVIEW_REQUIRE_APPROVAL is false
           featured: false,
         });
         console.debug("[reviews] Review saved to DB:", savedReview._id);
@@ -115,7 +125,7 @@ router.get("/", async (req, res) => {
 
     const reviews = await Review.find({ approved: true })
       .sort({ createdAt: -1 })
-      .limit(50);
+      .limit(REVIEW_MAX_LIMIT);
 
     return res.status(200).json({
       success: true,

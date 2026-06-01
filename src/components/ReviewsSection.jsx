@@ -2,7 +2,11 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 export default function ReviewsSection() {
-  const [reviews, setReviews] = useState([
+  // Get API URL from environment variables
+  const API_URL = import.meta.env.VITE_API_URL;
+
+  // Default sample reviews (fallback)
+  const defaultReviews = [
     {
       id: 1,
       name: "Venkatesh",
@@ -35,7 +39,10 @@ export default function ReviewsSection() {
       message: "Amazing work! They changed my laptop hardware perfectly. Very professional team and good quality parts. Very satisfied!",
       date: "2024-05-14"
     },
-  ]);
+  ];
+
+  const [reviews, setReviews] = useState(defaultReviews);
+  const [isLoadingReviews, setIsLoadingReviews] = useState(true);
 
   const [feedbackForm, setFeedbackForm] = useState({
     fullName: "",
@@ -50,6 +57,49 @@ export default function ReviewsSection() {
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Fetch approved reviews from backend API
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        setIsLoadingReviews(true);
+        const response = await axios.get(`${API_URL}/reviews`);
+        
+        if (response.data && response.data.data && response.data.data.length > 0) {
+          // Map backend reviews to frontend format
+          const backendReviews = response.data.data.map((review, index) => ({
+            id: index + 1,
+            name: review.name,
+            rating: review.rating,
+            service: review.service,
+            message: review.message,
+            date: review.createdAt ? review.createdAt.split('T')[0] : new Date().toISOString().split('T')[0],
+          }));
+          
+          setReviews(backendReviews);
+          console.log("[ReviewsSection] Backend reviews loaded successfully");
+        } else {
+          // Use default reviews if no backend reviews found
+          setReviews(defaultReviews);
+          console.log("[ReviewsSection] No backend reviews found, using defaults");
+        }
+      } catch (error) {
+        console.error("[ReviewsSection] Failed to fetch reviews from backend:", error.message || error);
+        // Keep using default reviews as fallback
+        setReviews(defaultReviews);
+      } finally {
+        setIsLoadingReviews(false);
+      }
+    };
+
+    // Only fetch if API_URL is configured
+    if (API_URL) {
+      fetchReviews();
+    } else {
+      console.warn("[ReviewsSection] VITE_API_URL not configured, using default reviews");
+      setIsLoadingReviews(false);
+    }
+  }, [API_URL]);
 
   const averageRating = (
     reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
@@ -99,7 +149,11 @@ export default function ReviewsSection() {
     setIsSubmitting(true);
 
     try {
-      const response = await axios.post("http://localhost:5000/api/reviews", {
+      // Use API URL from environment variables
+      const reviewApiUrl = `${API_URL}/reviews`;
+      console.log("[ReviewsSection] Submitting review to:", reviewApiUrl);
+
+      const response = await axios.post(reviewApiUrl, {
         name: feedbackForm.fullName,
         email: feedbackForm.email,
         service: feedbackForm.serviceUsed,
@@ -128,6 +182,7 @@ export default function ReviewsSection() {
         });
         setShowSuccess(true);
         setTimeout(() => setShowSuccess(false), 4000);
+        console.log("[ReviewsSection] Review submitted successfully");
       }
     } catch (error) {
       const msg =
@@ -137,6 +192,7 @@ export default function ReviewsSection() {
       setErrorMessage(msg);
       setShowError(true);
       setTimeout(() => setShowError(false), 4000);
+      console.error("[ReviewsSection] Error submitting review:", msg);
     } finally {
       setIsSubmitting(false);
     }
