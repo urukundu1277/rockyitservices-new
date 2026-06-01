@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import ServiceCard from "../components/ServiceCard";
 import Hero from "../components/Hero";
+import ReviewsSection from "../components/ReviewsSection";
 
 const previewServices = [
   {
@@ -388,6 +389,8 @@ export default function Home() {
           {errorMessage}
         </div>
       )}
+
+      <ReviewsSection />
 
       <Footer />
     </div>

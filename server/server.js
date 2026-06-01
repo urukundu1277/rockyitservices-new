@@ -47,6 +47,12 @@ app.use(
     require("./routes/contactRoutes")
 );
 
+// Reviews route
+app.use(
+    "/api/reviews",
+    require("./routes/reviewRoutes")
+);
+
 // Additional notification endpoints
 app.use(
     "/api/register",
