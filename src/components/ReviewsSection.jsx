@@ -227,10 +227,6 @@ export default function ReviewsSection() {
                   <p className="text-gray-700 text-sm leading-relaxed italic">
                     "{currentReview.message}"
                   </p>
-
-                  <p className="text-gray-500 text-xs mt-2">
-                    {new Date(currentReview.date).toLocaleDateString()}
-                  </p>
                 </div>
 
                 {/* Carousel Controls */}
