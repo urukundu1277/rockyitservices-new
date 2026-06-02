@@ -27,7 +27,7 @@ export default function Navbar() {
     "text-gray-700 hover:text-black hover:bg-white/70 px-5 py-2 rounded-full transition-all duration-300";
 
   return (
-    <nav className="relative overflow-hidden bg-gradient-to-r from-slate-100 via-white to-slate-200 text-gray-900 shadow-2xl border-b border-gray-300">
+    <nav className="fixed top-0 left-0 right-0 overflow-hidden bg-gradient-to-r from-slate-100 via-white to-slate-200 text-gray-900 shadow-2xl border-b border-gray-300 z-50">
 
       {/* Floating Service Icons */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">

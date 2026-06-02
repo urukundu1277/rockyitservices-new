@@ -62,7 +62,7 @@ export default function Contact() {
   }, [showError]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 pt-24">
       <Navbar />
 
       <main className="max-w-3xl mx-auto px-4 sm:px-6 py-10 sm:py-20">

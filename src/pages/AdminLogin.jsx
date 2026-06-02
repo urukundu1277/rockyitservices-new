@@ -50,7 +50,7 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-gray-100 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-gray-100 flex flex-col pt-24">
       <Navbar />
       <main className="flex-1 flex items-center justify-center py-20 px-4">
         <div className="w-full max-w-lg bg-white rounded-2xl shadow-xl p-8">
