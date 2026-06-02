@@ -3,10 +3,14 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 
 const connectDB = require("./config/db");
+const seedReviews = require("./seeds/seedReviews");
 
 dotenv.config();
 
 connectDB();
+
+// Seed default reviews after database connection
+seedReviews().catch(err => console.error("[server] Seed error:", err.message || err));
 
 const app = express();
 

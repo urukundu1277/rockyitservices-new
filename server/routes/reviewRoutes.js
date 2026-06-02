@@ -9,14 +9,7 @@ const {
 } = require("../services/telegram");
 
 // Review model
-const Review = (() => {
-  try {
-    return require("../models/Review");
-  } catch (err) {
-    console.debug("[reviewRoutes] Review model not found");
-    return null;
-  }
-})();
+const Review = require("../models/Review");
 
 // Environment variables for review configuration
 const REVIEW_REQUIRE_APPROVAL = process.env.REVIEW_REQUIRE_APPROVAL !== "false";
@@ -58,23 +51,26 @@ router.post("/", async (req, res) => {
       });
     }
 
-    // Save review to database if model exists
+    // Save review to database - REQUIRED
     let savedReview = null;
-    if (Review) {
-      try {
-        savedReview = await Review.create({
-          name,
-          email,
-          service,
-          rating,
-          message,
-          approved: !REVIEW_REQUIRE_APPROVAL, // Auto-approve if REVIEW_REQUIRE_APPROVAL is false
-          featured: false,
-        });
-        console.debug("[reviews] Review saved to DB:", savedReview._id);
-      } catch (dbErr) {
-        console.error("[reviews] Failed to save review to DB:", dbErr.message || dbErr);
-      }
+    try {
+      savedReview = await Review.create({
+        name,
+        email,
+        service,
+        rating,
+        message,
+        approved: !REVIEW_REQUIRE_APPROVAL, // Auto-approve if REVIEW_REQUIRE_APPROVAL is false
+        featured: false,
+      });
+      console.log("[reviews] Review saved to DB with ID:", savedReview._id);
+    } catch (dbErr) {
+      console.error("[reviews] CRITICAL - Failed to save review to DB:", dbErr.message || dbErr);
+      return res.status(500).json({
+        success: false,
+        message: "Failed to save review to database",
+        error: dbErr.message || String(dbErr),
+      });
     }
 
     // Prepare notification message
