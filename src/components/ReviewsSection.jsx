@@ -162,17 +162,7 @@ export default function ReviewsSection() {
       });
 
       if (response.status === 200 || response.status === 201) {
-        // Add new review to the list
-        const newReview = {
-          id: reviews.length + 1,
-          name: feedbackForm.fullName,
-          rating: feedbackForm.rating,
-          service: feedbackForm.serviceUsed,
-          message: feedbackForm.feedbackMessage,
-          date: new Date().toISOString().split('T')[0],
-        };
-
-        setReviews([newReview, ...reviews]);
+        // Clear form
         setFeedbackForm({
           fullName: "",
           email: "",
@@ -183,6 +173,25 @@ export default function ReviewsSection() {
         setShowSuccess(true);
         setTimeout(() => setShowSuccess(false), 4000);
         console.log("[ReviewsSection] Review submitted successfully");
+
+        // Refetch all reviews to include the newly submitted one
+        try {
+          const updatedResponse = await axios.get(reviewApiUrl);
+          if (updatedResponse.data && updatedResponse.data.data && updatedResponse.data.data.length > 0) {
+            const backendReviews = updatedResponse.data.data.map((review, index) => ({
+              id: index + 1,
+              name: review.name,
+              rating: review.rating,
+              service: review.service,
+              message: review.message,
+              date: review.createdAt ? review.createdAt.split('T')[0] : new Date().toISOString().split('T')[0],
+            }));
+            setReviews(backendReviews);
+            console.log("[ReviewsSection] Reviews refetched after submission, total:", backendReviews.length);
+          }
+        } catch (refetchErr) {
+          console.error("[ReviewsSection] Failed to refetch reviews after submission:", refetchErr.message || refetchErr);
+        }
       }
     } catch (error) {
       const msg =
