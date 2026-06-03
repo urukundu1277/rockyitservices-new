@@ -28,7 +28,7 @@ router.get("/:id", async (req, res) => {
 
 // POST create new team member
 router.post("/", async (req, res) => {
-  const { name, position, email, phone, image } = req.body;
+  const { name, position, email, phone, image, field, location, company } = req.body;
 
   if (!name || !position || !email || !phone) {
     return res
@@ -42,6 +42,9 @@ router.post("/", async (req, res) => {
     email,
     phone,
     image: image || null,
+    field: field || null,
+    location: location || null,
+    company: company || "Rocky IT Services",
   });
 
   try {
@@ -60,13 +63,16 @@ router.put("/:id", async (req, res) => {
       return res.status(404).json({ message: "Team member not found" });
     }
 
-    const { name, position, email, phone, image } = req.body;
+    const { name, position, email, phone, image, field, location, company } = req.body;
 
     if (name) teamMember.name = name;
     if (position) teamMember.position = position;
     if (email) teamMember.email = email;
     if (phone) teamMember.phone = phone;
     if (image !== undefined) teamMember.image = image;
+    if (field !== undefined) teamMember.field = field;
+    if (location !== undefined) teamMember.location = location;
+    if (company !== undefined) teamMember.company = company || "Rocky IT Services";
 
     const updated = await teamMember.save();
     res.status(200).json(updated);

@@ -30,6 +30,9 @@ export default function Admin() {
     position: "",
     email: "",
     phone: "",
+    field: "",
+    location: "",
+    company: "Rocky IT Services",
     image: null,
     imagePreview: "",
   });
@@ -215,6 +218,9 @@ export default function Admin() {
         position: "",
         email: "",
         phone: "",
+        field: "",
+        location: "",
+        company: "Rocky IT Services",
         image: null,
         imagePreview: "",
       });
@@ -233,6 +239,9 @@ export default function Admin() {
       position: member.position,
       email: member.email || "",
       phone: member.phone || "",
+      field: member.field || "",
+      location: member.location || "",
+      company: member.company || "Rocky IT Services",
       image: member.image || null,
       imagePreview: member.image || "",
     });
@@ -554,6 +563,30 @@ export default function Admin() {
                   required
                   className="border border-gray-200 rounded-lg px-3 py-2"
                 />
+                <input
+                  type="text"
+                  name="field"
+                  placeholder="Field/Expertise"
+                  value={teamFormData.field}
+                  onChange={handleTeamFormChange}
+                  className="border border-gray-200 rounded-lg px-3 py-2"
+                />
+                <input
+                  type="text"
+                  name="location"
+                  placeholder="Location"
+                  value={teamFormData.location}
+                  onChange={handleTeamFormChange}
+                  className="border border-gray-200 rounded-lg px-3 py-2"
+                />
+                <input
+                  type="text"
+                  name="company"
+                  placeholder="Company"
+                  value={teamFormData.company}
+                  onChange={handleTeamFormChange}
+                  className="border border-gray-200 rounded-lg px-3 py-2"
+                />
                 <div className="sm:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-2">Upload Image</label>
                   <input
@@ -581,20 +614,23 @@ export default function Admin() {
 
           {/* Team Members Table */}
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm min-w-[600px]">
+            <table className="w-full text-left text-sm min-w-[800px]">
               <thead className="bg-gradient-to-r from-gray-100 to-white">
                 <tr className="text-sm text-gray-600">
                   <th className="p-4">Name</th>
                   <th className="p-4">Role</th>
                   <th className="p-4">Email</th>
                   <th className="p-4">Phone</th>
+                  <th className="p-4">Field</th>
+                  <th className="p-4">Location</th>
+                  <th className="p-4">Company</th>
                   <th className="p-4">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {teamMembers.length === 0 ? (
                   <tr>
-                    <td colSpan="5" className="p-8 text-center text-gray-600">
+                    <td colSpan="8" className="p-8 text-center text-gray-600">
                       <div className="text-xl font-semibold">No team members added yet</div>
                       <div className="mt-2">Click "Add Team Member" to get started.</div>
                     </td>
@@ -606,6 +642,9 @@ export default function Admin() {
                       <td className="p-4">{member.position}</td>
                       <td className="p-4 text-sm text-gray-600">{member.email}</td>
                       <td className="p-4 text-sm text-gray-600">{member.phone}</td>
+                      <td className="p-4 text-sm text-gray-600">{member.field || "—"}</td>
+                      <td className="p-4 text-sm text-gray-600">{member.location || "—"}</td>
+                      <td className="p-4 text-sm text-gray-600">{member.company || "—"}</td>
                       <td className="p-4 flex gap-2">
                         <button
                           onClick={() => editTeamMember(member)}

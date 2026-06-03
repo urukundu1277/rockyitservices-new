@@ -12,6 +12,11 @@ const teamMemberSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    field: {
+      type: String,
+      required: false,
+      trim: true,
+    },
     email: {
       type: String,
       required: true,
@@ -21,6 +26,16 @@ const teamMemberSchema = new mongoose.Schema(
     phone: {
       type: String,
       required: true,
+      trim: true,
+    },
+    location: {
+      type: String,
+      required: false,
+      trim: true,
+    },
+    company: {
+      type: String,
+      default: "Rocky IT Services",
       trim: true,
     },
     image: {

@@ -8,7 +8,7 @@ export default function Navbar() {
     { to: "/", label: "Home" },
     { to: "#about", label: "About", isScrollLink: true },
     { to: "/services", label: "Services" },
-    { to: "/team", label: "Team" },
+    { to: "/team", label: "Our Team" },
     { to: "/contact", label: "Contact Us" },
   ];
 
