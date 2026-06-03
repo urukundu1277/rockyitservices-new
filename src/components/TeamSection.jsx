@@ -56,14 +56,14 @@ export default function TeamSection() {
         </div>
 
         {/* Team Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {teamMembers.map((member) => (
             <div
               key={member._id}
-              className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
+              className="group bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
             >
-              {/* Member Image */}
-              <div className="relative h-64 bg-gradient-to-br from-cyan-400 to-violet-600 overflow-hidden">
+              {/* Member Image - Smaller */}
+              <div className="relative h-32 bg-gradient-to-br from-cyan-400 to-violet-600 overflow-hidden">
                 {member.image ? (
                   <img
                     src={member.image}
@@ -71,66 +71,36 @@ export default function TeamSection() {
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-white text-6xl font-bold">
+                  <div className="w-full h-full flex items-center justify-center text-white text-4xl font-bold">
                     {member.name.charAt(0)}
                   </div>
                 )}
               </div>
 
               {/* Member Info */}
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-1">
+              <div className="p-4">
+                <h3 className="text-lg font-bold text-gray-900 mb-1">
                   {member.name}
                 </h3>
-                <p className="text-cyan-600 font-semibold mb-3">
+                <p className="text-cyan-600 font-semibold text-sm mb-3">
                   {member.position}
                 </p>
 
-                {member.experience && (
-                  <p className="text-sm text-gray-600 mb-3">
-                    <span className="font-semibold">Experience:</span> {member.experience}
-                  </p>
-                )}
-
-                {member.bio && (
-                  <p className="text-gray-700 text-sm mb-4 line-clamp-3">
-                    {member.bio}
-                  </p>
-                )}
-
-                {member.expertise && member.expertise.length > 0 && (
-                  <div className="mb-4">
-                    <p className="text-xs font-semibold text-gray-600 mb-2">
-                      Expertise:
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {member.expertise.map((skill, idx) => (
-                        <span
-                          key={idx}
-                          className="px-3 py-1 bg-cyan-100 text-cyan-700 text-xs font-medium rounded-full"
-                        >
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
                 {/* Contact Info */}
-                <div className="pt-4 border-t border-gray-200 space-y-2">
+                <div className="space-y-2 border-t border-gray-200 pt-3">
                   {member.email && (
                     <a
                       href={`mailto:${member.email}`}
-                      className="flex items-center text-sm text-gray-600 hover:text-cyan-600 transition-colors"
+                      className="flex items-center text-xs text-gray-600 hover:text-cyan-600 transition-colors truncate"
                     >
                       <span className="mr-2">📧</span>
-                      {member.email}
+                      <span className="truncate">{member.email}</span>
                     </a>
                   )}
                   {member.phone && (
                     <a
                       href={`tel:${member.phone}`}
-                      className="flex items-center text-sm text-gray-600 hover:text-cyan-600 transition-colors"
+                      className="flex items-center text-xs text-gray-600 hover:text-cyan-600 transition-colors"
                     >
                       <span className="mr-2">📱</span>
                       {member.phone}

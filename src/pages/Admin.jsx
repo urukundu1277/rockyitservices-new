@@ -28,12 +28,10 @@ export default function Admin() {
   const [teamFormData, setTeamFormData] = useState({
     name: "",
     position: "",
-    bio: "",
-    image: "",
     email: "",
     phone: "",
-    experience: "",
-    expertise: "",
+    image: null,
+    imagePreview: "",
   });
 
   useEffect(() => {
@@ -170,15 +168,34 @@ export default function Admin() {
   };
 
   const handleTeamFormChange = (e) => {
-    const { name, value } = e.target;
-    setTeamFormData((prev) => ({ ...prev, [name]: value }));
+    const { name, value, files } = e.target;
+    
+    if (name === "image" && files && files[0]) {
+      const file = files[0];
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setTeamFormData((prev) => ({
+          ...prev,
+          image: reader.result,
+          imagePreview: reader.result,
+        }));
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setTeamFormData((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleTeamFormSubmit = async (e) => {
     e.preventDefault();
     try {
-      const expertise = teamFormData.expertise ? teamFormData.expertise.split(",").map(s => s.trim()).filter(Boolean) : [];
-      const payload = { ...teamFormData, expertise };
+      const payload = {
+        name: teamFormData.name,
+        position: teamFormData.position,
+        email: teamFormData.email,
+        phone: teamFormData.phone,
+        image: teamFormData.image,
+      };
 
       if (editingTeamId) {
         const res = await axios.put(`${API_BASE_URL}/team/${editingTeamId}`, payload);
@@ -196,12 +213,10 @@ export default function Admin() {
       setTeamFormData({
         name: "",
         position: "",
-        bio: "",
-        image: "",
         email: "",
         phone: "",
-        experience: "",
-        expertise: "",
+        image: null,
+        imagePreview: "",
       });
       setEditingTeamId(null);
       setShowTeamForm(false);
@@ -216,12 +231,10 @@ export default function Admin() {
     setTeamFormData({
       name: member.name,
       position: member.position,
-      bio: member.bio || "",
-      image: member.image || "",
       email: member.email || "",
       phone: member.phone || "",
-      experience: member.experience || "",
-      expertise: member.expertise?.join(", ") || "",
+      image: member.image || null,
+      imagePreview: member.image || "",
     });
     setEditingTeamId(member._id);
     setShowTeamForm(true);
@@ -489,12 +502,10 @@ export default function Admin() {
                 setTeamFormData({
                   name: "",
                   position: "",
-                  bio: "",
-                  image: "",
                   email: "",
                   phone: "",
-                  experience: "",
-                  expertise: "",
+                  image: null,
+                  imagePreview: "",
                 });
               }}
               className="w-full sm:w-auto px-4 py-2 bg-cyan-600 text-white rounded-lg text-sm hover:bg-cyan-700 transition"
@@ -519,7 +530,7 @@ export default function Admin() {
                 <input
                   type="text"
                   name="position"
-                  placeholder="Position/Title"
+                  placeholder="Role/Title"
                   value={teamFormData.position}
                   onChange={handleTeamFormChange}
                   required
@@ -528,51 +539,36 @@ export default function Admin() {
                 <input
                   type="email"
                   name="email"
-                  placeholder="Email (optional)"
+                  placeholder="Email"
                   value={teamFormData.email}
                   onChange={handleTeamFormChange}
+                  required
                   className="border border-gray-200 rounded-lg px-3 py-2"
                 />
                 <input
                   type="tel"
                   name="phone"
-                  placeholder="Phone (optional)"
+                  placeholder="Phone Number"
                   value={teamFormData.phone}
                   onChange={handleTeamFormChange}
+                  required
                   className="border border-gray-200 rounded-lg px-3 py-2"
                 />
-                <input
-                  type="text"
-                  name="experience"
-                  placeholder="Experience (e.g., 5+ years)"
-                  value={teamFormData.experience}
-                  onChange={handleTeamFormChange}
-                  className="border border-gray-200 rounded-lg px-3 py-2"
-                />
-                <input
-                  type="url"
-                  name="image"
-                  placeholder="Image URL (optional)"
-                  value={teamFormData.image}
-                  onChange={handleTeamFormChange}
-                  className="border border-gray-200 rounded-lg px-3 py-2"
-                />
-                <textarea
-                  name="bio"
-                  placeholder="Bio/Description (optional)"
-                  value={teamFormData.bio}
-                  onChange={handleTeamFormChange}
-                  rows="2"
-                  className="border border-gray-200 rounded-lg px-3 py-2 sm:col-span-2"
-                />
-                <input
-                  type="text"
-                  name="expertise"
-                  placeholder="Expertise (comma-separated, optional)"
-                  value={teamFormData.expertise}
-                  onChange={handleTeamFormChange}
-                  className="border border-gray-200 rounded-lg px-3 py-2 sm:col-span-2"
-                />
+                <div className="sm:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Upload Image</label>
+                  <input
+                    type="file"
+                    name="image"
+                    accept="image/*"
+                    onChange={handleTeamFormChange}
+                    className="border border-gray-200 rounded-lg px-3 py-2 w-full"
+                  />
+                  {teamFormData.imagePreview && (
+                    <div className="mt-3">
+                      <img src={teamFormData.imagePreview} alt="Preview" className="w-20 h-20 rounded-lg object-cover" />
+                    </div>
+                  )}
+                </div>
               </div>
               <button
                 type="submit"
@@ -589,17 +585,16 @@ export default function Admin() {
               <thead className="bg-gradient-to-r from-gray-100 to-white">
                 <tr className="text-sm text-gray-600">
                   <th className="p-4">Name</th>
-                  <th className="p-4">Position</th>
+                  <th className="p-4">Role</th>
                   <th className="p-4">Email</th>
                   <th className="p-4">Phone</th>
-                  <th className="p-4">Experience</th>
                   <th className="p-4">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {teamMembers.length === 0 ? (
                   <tr>
-                    <td colSpan="6" className="p-8 text-center text-gray-600">
+                    <td colSpan="5" className="p-8 text-center text-gray-600">
                       <div className="text-xl font-semibold">No team members added yet</div>
                       <div className="mt-2">Click "Add Team Member" to get started.</div>
                     </td>
@@ -609,9 +604,8 @@ export default function Admin() {
                     <tr key={member._id} className="border-b hover:bg-gray-50 transition">
                       <td className="p-4 font-medium">{member.name}</td>
                       <td className="p-4">{member.position}</td>
-                      <td className="p-4 text-sm text-gray-600">{member.email || "-"}</td>
-                      <td className="p-4 text-sm text-gray-600">{member.phone || "-"}</td>
-                      <td className="p-4 text-sm text-gray-600">{member.experience || "-"}</td>
+                      <td className="p-4 text-sm text-gray-600">{member.email}</td>
+                      <td className="p-4 text-sm text-gray-600">{member.phone}</td>
                       <td className="p-4 flex gap-2">
                         <button
                           onClick={() => editTeamMember(member)}

@@ -28,24 +28,20 @@ router.get("/:id", async (req, res) => {
 
 // POST create new team member
 router.post("/", async (req, res) => {
-  const { name, position, bio, image, email, phone, experience, expertise } =
-    req.body;
+  const { name, position, email, phone, image } = req.body;
 
-  if (!name || !position) {
+  if (!name || !position || !email || !phone) {
     return res
       .status(400)
-      .json({ message: "Name and position are required" });
+      .json({ message: "Name, position, email, and phone are required" });
   }
 
   const newTeamMember = new TeamMember({
     name,
     position,
-    bio,
-    image,
     email,
     phone,
-    experience,
-    expertise: expertise || [],
+    image: image || null,
   });
 
   try {
@@ -64,17 +60,13 @@ router.put("/:id", async (req, res) => {
       return res.status(404).json({ message: "Team member not found" });
     }
 
-    const { name, position, bio, image, email, phone, experience, expertise } =
-      req.body;
+    const { name, position, email, phone, image } = req.body;
 
     if (name) teamMember.name = name;
     if (position) teamMember.position = position;
-    if (bio !== undefined) teamMember.bio = bio;
+    if (email) teamMember.email = email;
+    if (phone) teamMember.phone = phone;
     if (image !== undefined) teamMember.image = image;
-    if (email !== undefined) teamMember.email = email;
-    if (phone !== undefined) teamMember.phone = phone;
-    if (experience !== undefined) teamMember.experience = experience;
-    if (expertise !== undefined) teamMember.expertise = expertise;
 
     const updated = await teamMember.save();
     res.status(200).json(updated);

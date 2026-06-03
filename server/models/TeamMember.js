@@ -12,33 +12,20 @@ const teamMemberSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    bio: {
-      type: String,
-      required: false,
-      trim: true,
-    },
-    image: {
-      type: String,
-      required: false,
-    },
     email: {
       type: String,
-      required: false,
+      required: true,
       trim: true,
       lowercase: true,
     },
     phone: {
       type: String,
-      required: false,
-    },
-    experience: {
-      type: String,
-      required: false,
+      required: true,
       trim: true,
     },
-    expertise: {
-      type: [String],
-      default: [],
+    image: {
+      type: String,
+      required: false,
     },
   },
   { timestamps: true }
