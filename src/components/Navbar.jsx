@@ -110,6 +110,10 @@ export default function Navbar() {
                 key={l.to}
                 to={l.to}
                 end
+                onClick={() => {
+                  setOpen(false);
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
                 className={({ isActive }) =>
                   `relative transition-all duration-300 backdrop-blur-md ${
                     isActive ? active : inactive
@@ -189,7 +193,10 @@ export default function Navbar() {
               <NavLink
                 key={l.to}
                 to={l.to}
-                onClick={() => setOpen(false)}
+                onClick={() => {
+                  setOpen(false);
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
                 className={({ isActive }) =>
                   `block px-4 py-3 rounded-2xl text-lg transition-all duration-300 ${
                     isActive

@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import ServiceCard from "../components/ServiceCard";
 import Footer from "../components/Footer";
@@ -101,6 +101,10 @@ export default function Services() {
     // navigate to home and open booking modal
     const url = `/?service=${encodeURIComponent(title)}`;
     window.location.href = url;
+  }, []);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
   return (

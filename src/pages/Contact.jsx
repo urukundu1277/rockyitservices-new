@@ -42,6 +42,10 @@ export default function Contact() {
   };
 
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  useEffect(() => {
     if (showSuccess) {
       const t = setTimeout(() => {
         setShowSuccess(false);
