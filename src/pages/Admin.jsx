@@ -30,7 +30,6 @@ export default function Admin() {
     position: "",
     email: "",
     phone: "",
-    field: "",
     location: "",
     company: "Rocky IT Services",
     image: null,
@@ -197,6 +196,8 @@ export default function Admin() {
         position: teamFormData.position,
         email: teamFormData.email,
         phone: teamFormData.phone,
+        location: teamFormData.location,
+        company: teamFormData.company,
         image: teamFormData.image,
       };
 
@@ -218,7 +219,6 @@ export default function Admin() {
         position: "",
         email: "",
         phone: "",
-        field: "",
         location: "",
         company: "Rocky IT Services",
         image: null,
@@ -239,7 +239,6 @@ export default function Admin() {
       position: member.position,
       email: member.email || "",
       phone: member.phone || "",
-      field: member.field || "",
       location: member.location || "",
       company: member.company || "Rocky IT Services",
       image: member.image || null,
@@ -513,6 +512,8 @@ export default function Admin() {
                   position: "",
                   email: "",
                   phone: "",
+                  location: "",
+                  company: "Rocky IT Services",
                   image: null,
                   imagePreview: "",
                 });
@@ -565,14 +566,6 @@ export default function Admin() {
                 />
                 <input
                   type="text"
-                  name="field"
-                  placeholder="Field/Expertise"
-                  value={teamFormData.field}
-                  onChange={handleTeamFormChange}
-                  className="border border-gray-200 rounded-lg px-3 py-2"
-                />
-                <input
-                  type="text"
                   name="location"
                   placeholder="Location"
                   value={teamFormData.location}
@@ -621,7 +614,6 @@ export default function Admin() {
                   <th className="p-4">Role</th>
                   <th className="p-4">Email</th>
                   <th className="p-4">Phone</th>
-                  <th className="p-4">Field</th>
                   <th className="p-4">Location</th>
                   <th className="p-4">Company</th>
                   <th className="p-4">Actions</th>
@@ -630,7 +622,7 @@ export default function Admin() {
               <tbody>
                 {teamMembers.length === 0 ? (
                   <tr>
-                    <td colSpan="8" className="p-8 text-center text-gray-600">
+                    <td colSpan="7" className="p-8 text-center text-gray-600">
                       <div className="text-xl font-semibold">No team members added yet</div>
                       <div className="mt-2">Click "Add Team Member" to get started.</div>
                     </td>
@@ -642,7 +634,6 @@ export default function Admin() {
                       <td className="p-4">{member.position}</td>
                       <td className="p-4 text-sm text-gray-600">{member.email}</td>
                       <td className="p-4 text-sm text-gray-600">{member.phone}</td>
-                      <td className="p-4 text-sm text-gray-600">{member.field || "—"}</td>
                       <td className="p-4 text-sm text-gray-600">{member.location || "—"}</td>
                       <td className="p-4 text-sm text-gray-600">{member.company || "—"}</td>
                       <td className="p-4 flex gap-2">
