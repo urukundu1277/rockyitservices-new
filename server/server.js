@@ -79,6 +79,12 @@ app.use(
     require("./routes/adminAuthRoutes")
 );
 
+// Team members routes
+app.use(
+    "/api/team",
+    require("./routes/teamRoutes")
+);
+
 // Test endpoint for Telegram
 app.get("/api/test-telegram", async (req, res) => {
     try {

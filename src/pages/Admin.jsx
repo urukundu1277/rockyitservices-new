@@ -5,11 +5,12 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 // API base URL
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+const API_BASE_URL = import.meta.env.VITE_API_URL || "https://rockyitservices-new.onrender.com/api";
 
 export default function Admin() {
   const navigate = useNavigate();
   const [customers, setCustomers] = useState([]);
+  const [teamMembers, setTeamMembers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState("All");
@@ -21,6 +22,19 @@ export default function Admin() {
   const [errorMessage, setErrorMessage] = useState("");
   const [deletingIds, setDeletingIds] = useState([]);
   const [adminUser, setAdminUser] = useState(null);
+  const [activeTab, setActiveTab] = useState("customers");
+  const [showTeamForm, setShowTeamForm] = useState(false);
+  const [editingTeamId, setEditingTeamId] = useState(null);
+  const [teamFormData, setTeamFormData] = useState({
+    name: "",
+    position: "",
+    bio: "",
+    image: "",
+    email: "",
+    phone: "",
+    experience: "",
+    expertise: "",
+  });
 
   useEffect(() => {
     const token = localStorage.getItem('adminToken');
@@ -54,6 +68,7 @@ export default function Admin() {
       }
 
       fetchCustomers(token);
+      fetchTeamMembers();
     } catch (error) {
       console.error('Token verification failed:', error.message);
       localStorage.removeItem('adminToken');
@@ -73,6 +88,15 @@ export default function Admin() {
       console.error('Failed to fetch customers:', error.message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchTeamMembers = async () => {
+    try {
+      const res = await axios.get(`${API_BASE_URL}/team`);
+      setTeamMembers(res.data || []);
+    } catch (error) {
+      console.error('Failed to fetch team members:', error.message);
     }
   };
 
@@ -145,6 +169,79 @@ export default function Admin() {
     window.open(url, '_blank', 'noopener');
   };
 
+  const handleTeamFormChange = (e) => {
+    const { name, value } = e.target;
+    setTeamFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleTeamFormSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const expertise = teamFormData.expertise ? teamFormData.expertise.split(",").map(s => s.trim()).filter(Boolean) : [];
+      const payload = { ...teamFormData, expertise };
+
+      if (editingTeamId) {
+        const res = await axios.put(`${API_BASE_URL}/team/${editingTeamId}`, payload);
+        setTeamMembers((prev) =>
+          prev.map((m) => (m._id === editingTeamId ? res.data : m))
+        );
+        setSuccessMessage("Team member updated successfully");
+      } else {
+        const res = await axios.post(`${API_BASE_URL}/team`, payload);
+        setTeamMembers((prev) => [res.data, ...prev]);
+        setSuccessMessage("Team member added successfully");
+      }
+
+      setShowSuccess(true);
+      setTeamFormData({
+        name: "",
+        position: "",
+        bio: "",
+        image: "",
+        email: "",
+        phone: "",
+        experience: "",
+        expertise: "",
+      });
+      setEditingTeamId(null);
+      setShowTeamForm(false);
+    } catch (error) {
+      console.error("Team form error:", error.response?.data || error.message);
+      setErrorMessage(error?.response?.data?.message || error.message || "Failed to save team member");
+      setShowError(true);
+    }
+  };
+
+  const editTeamMember = (member) => {
+    setTeamFormData({
+      name: member.name,
+      position: member.position,
+      bio: member.bio || "",
+      image: member.image || "",
+      email: member.email || "",
+      phone: member.phone || "",
+      experience: member.experience || "",
+      expertise: member.expertise?.join(", ") || "",
+    });
+    setEditingTeamId(member._id);
+    setShowTeamForm(true);
+  };
+
+  const deleteTeamMember = async (id) => {
+    if (!window.confirm("Delete this team member permanently?")) return;
+
+    try {
+      await axios.delete(`${API_BASE_URL}/team/${id}`);
+      setTeamMembers((prev) => prev.filter((m) => m._id !== id));
+      setSuccessMessage("Team member deleted successfully");
+      setShowSuccess(true);
+    } catch (error) {
+      console.error(error);
+      setErrorMessage(error?.response?.data?.message || "Failed to delete team member");
+      setShowError(true);
+    }
+  };
+
   useEffect(() => {
     if (showSuccess || showError) {
       const timer = setTimeout(() => {
@@ -192,6 +289,30 @@ export default function Admin() {
           </button>
         </div>
 
+        {/* Tabs */}
+        <div className="flex gap-4 mt-6 border-b border-gray-200">
+          <button
+            onClick={() => setActiveTab("customers")}
+            className={`px-6 py-3 font-semibold transition-all ${
+              activeTab === "customers"
+                ? "border-b-2 border-cyan-600 text-cyan-600"
+                : "text-gray-600 hover:text-gray-900"
+            }`}
+          >
+            Customers
+          </button>
+          <button
+            onClick={() => setActiveTab("team")}
+            className={`px-6 py-3 font-semibold transition-all ${
+              activeTab === "team"
+                ? "border-b-2 border-cyan-600 text-cyan-600"
+                : "text-gray-600 hover:text-gray-900"
+            }`}
+          >
+            Team Members
+          </button>
+        </div>
+
         {(showSuccess || showError) && (
           <div className="fixed top-4 left-4 right-4 z-50 mx-auto w-auto max-w-sm space-y-3 sm:right-5 sm:left-auto">
             {showSuccess && (
@@ -222,29 +343,35 @@ export default function Admin() {
         )}
 
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6 mt-8">
-          <div className="bg-gradient-to-br from-white to-gray-50 p-4 sm:p-6 rounded-2xl shadow">
-            <div className="text-sm text-gray-500">Total Requests</div>
-            <div className="text-2xl sm:text-3xl font-bold mt-2">{customers.length}</div>
-          </div>
-          <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 p-4 sm:p-6 rounded-2xl shadow">
-            <div className="text-sm text-gray-500">New Leads</div>
-            <div className="text-2xl sm:text-3xl font-bold mt-2 text-yellow-600">{customers.filter(c => (c.status || 'New Lead') === 'New Lead').length}</div>
-          </div>
-          <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 sm:p-6 rounded-2xl shadow">
-            <div className="text-sm text-gray-500">Contacted</div>
-            <div className="text-2xl sm:text-3xl font-bold mt-2 text-blue-600">{customers.filter(c => (c.status || 'New Lead') === 'Contacted').length}</div>
-          </div>
-          <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 p-4 sm:p-6 rounded-2xl shadow">
-            <div className="text-sm text-gray-500">Follow Ups</div>
-            <div className="text-2xl sm:text-3xl font-bold mt-2 text-indigo-600">{customers.filter(c => (c.status || 'New Lead') === 'Follow Up').length}</div>
-          </div>
-          <div className="bg-gradient-to-br from-green-50 to-green-100 p-4 sm:p-6 rounded-2xl shadow">
-            <div className="text-sm text-gray-500">Resolved</div>
-            <div className="text-2xl sm:text-3xl font-bold mt-2 text-green-600">{customers.filter(c => (c.status || 'New Lead') === 'Resolved').length}</div>
-          </div>
+          {activeTab === "customers" && (
+            <>
+              <div className="bg-gradient-to-br from-white to-gray-50 p-4 sm:p-6 rounded-2xl shadow">
+                <div className="text-sm text-gray-500">Total Requests</div>
+                <div className="text-2xl sm:text-3xl font-bold mt-2">{customers.length}</div>
+              </div>
+              <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 p-4 sm:p-6 rounded-2xl shadow">
+                <div className="text-sm text-gray-500">New Leads</div>
+                <div className="text-2xl sm:text-3xl font-bold mt-2 text-yellow-600">{customers.filter(c => (c.status || 'New Lead') === 'New Lead').length}</div>
+              </div>
+              <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 sm:p-6 rounded-2xl shadow">
+                <div className="text-sm text-gray-500">Contacted</div>
+                <div className="text-2xl sm:text-3xl font-bold mt-2 text-blue-600">{customers.filter(c => (c.status || 'New Lead') === 'Contacted').length}</div>
+              </div>
+              <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 p-4 sm:p-6 rounded-2xl shadow">
+                <div className="text-sm text-gray-500">Follow Ups</div>
+                <div className="text-2xl sm:text-3xl font-bold mt-2 text-indigo-600">{customers.filter(c => (c.status || 'New Lead') === 'Follow Up').length}</div>
+              </div>
+              <div className="bg-gradient-to-br from-green-50 to-green-100 p-4 sm:p-6 rounded-2xl shadow">
+                <div className="text-sm text-gray-500">Resolved</div>
+                <div className="text-2xl sm:text-3xl font-bold mt-2 text-green-600">{customers.filter(c => (c.status || 'New Lead') === 'Resolved').length}</div>
+              </div>
+            </>
+          )}
         </div>
 
         <div className="bg-white rounded-2xl shadow mt-8 overflow-hidden">
+            {activeTab === "customers" && (
+            <>
             <div className="p-4 sm:p-6 border-b flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div>
               <h2 className="text-xl font-semibold">Customer Requests</h2>
@@ -256,7 +383,7 @@ export default function Admin() {
               <div className="flex flex-wrap items-center gap-2 sm:gap-3 w-full sm:w-auto">
                 <select value={filterStatus} onChange={(e)=>setFilterStatus(e.target.value)} className="flex-1 sm:flex-initial border border-gray-200 rounded-lg px-3 py-2 bg-white">
                   <option value="All">All Statuses</option>
-                  {statuses.map(s => <option key={s} value={s}>{s}</option>)}
+                  {["New Lead", "Contacted", "Follow Up", "Resolved"].map(s => <option key={s} value={s}>{s}</option>)}
                 </select>
                 <button onClick={() => setSortLatest(s => !s)} className="flex-1 sm:flex-initial px-3 py-2 bg-gray-100 rounded-lg text-sm">{sortLatest ? 'Sort: Latest' : 'Sort: Natural'}</button>
                 <button onClick={() => setCompactView(v => !v)} className="flex-1 sm:flex-initial px-3 py-2 bg-gray-100 rounded-lg text-sm">{compactView ? 'Normal View' : 'Compact View'}</button>
@@ -344,6 +471,177 @@ export default function Admin() {
               )}
             </>
           )}
+            </>
+            )}
+
+            {/* Team Members Section */}
+            {activeTab === "team" && (
+            <>
+            <div className="p-4 sm:p-6 border-b flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <h2 className="text-xl font-semibold">Team Members</h2>
+              <div className="text-sm text-gray-500">Add, edit, and manage team members</div>
+            </div>
+            <button
+              onClick={() => {
+                setShowTeamForm(!showTeamForm);
+                setEditingTeamId(null);
+                setTeamFormData({
+                  name: "",
+                  position: "",
+                  bio: "",
+                  image: "",
+                  email: "",
+                  phone: "",
+                  experience: "",
+                  expertise: "",
+                });
+              }}
+              className="w-full sm:w-auto px-4 py-2 bg-cyan-600 text-white rounded-lg text-sm hover:bg-cyan-700 transition"
+            >
+              {showTeamForm ? "Cancel" : "+ Add Team Member"}
+            </button>
+          </div>
+
+          {/* Team Form */}
+          {showTeamForm && (
+            <form onSubmit={handleTeamFormSubmit} className="p-4 sm:p-6 border-b bg-gray-50">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Full Name"
+                  value={teamFormData.name}
+                  onChange={handleTeamFormChange}
+                  required
+                  className="border border-gray-200 rounded-lg px-3 py-2"
+                />
+                <input
+                  type="text"
+                  name="position"
+                  placeholder="Position/Title"
+                  value={teamFormData.position}
+                  onChange={handleTeamFormChange}
+                  required
+                  className="border border-gray-200 rounded-lg px-3 py-2"
+                />
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email (optional)"
+                  value={teamFormData.email}
+                  onChange={handleTeamFormChange}
+                  className="border border-gray-200 rounded-lg px-3 py-2"
+                />
+                <input
+                  type="tel"
+                  name="phone"
+                  placeholder="Phone (optional)"
+                  value={teamFormData.phone}
+                  onChange={handleTeamFormChange}
+                  className="border border-gray-200 rounded-lg px-3 py-2"
+                />
+                <input
+                  type="text"
+                  name="experience"
+                  placeholder="Experience (e.g., 5+ years)"
+                  value={teamFormData.experience}
+                  onChange={handleTeamFormChange}
+                  className="border border-gray-200 rounded-lg px-3 py-2"
+                />
+                <input
+                  type="url"
+                  name="image"
+                  placeholder="Image URL (optional)"
+                  value={teamFormData.image}
+                  onChange={handleTeamFormChange}
+                  className="border border-gray-200 rounded-lg px-3 py-2"
+                />
+                <textarea
+                  name="bio"
+                  placeholder="Bio/Description (optional)"
+                  value={teamFormData.bio}
+                  onChange={handleTeamFormChange}
+                  rows="2"
+                  className="border border-gray-200 rounded-lg px-3 py-2 sm:col-span-2"
+                />
+                <input
+                  type="text"
+                  name="expertise"
+                  placeholder="Expertise (comma-separated, optional)"
+                  value={teamFormData.expertise}
+                  onChange={handleTeamFormChange}
+                  className="border border-gray-200 rounded-lg px-3 py-2 sm:col-span-2"
+                />
+              </div>
+              <button
+                type="submit"
+                className="mt-4 px-6 py-2 bg-green-600 text-white rounded-lg text-sm hover:bg-green-700 transition"
+              >
+                {editingTeamId ? "Update Team Member" : "Add Team Member"}
+              </button>
+            </form>
+          )}
+
+          {/* Team Members Table */}
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-sm min-w-[600px]">
+              <thead className="bg-gradient-to-r from-gray-100 to-white">
+                <tr className="text-sm text-gray-600">
+                  <th className="p-4">Name</th>
+                  <th className="p-4">Position</th>
+                  <th className="p-4">Email</th>
+                  <th className="p-4">Phone</th>
+                  <th className="p-4">Experience</th>
+                  <th className="p-4">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {teamMembers.length === 0 ? (
+                  <tr>
+                    <td colSpan="6" className="p-8 text-center text-gray-600">
+                      <div className="text-xl font-semibold">No team members added yet</div>
+                      <div className="mt-2">Click "Add Team Member" to get started.</div>
+                    </td>
+                  </tr>
+                ) : (
+                  teamMembers.map((member) => (
+                    <tr key={member._id} className="border-b hover:bg-gray-50 transition">
+                      <td className="p-4 font-medium">{member.name}</td>
+                      <td className="p-4">{member.position}</td>
+                      <td className="p-4 text-sm text-gray-600">{member.email || "-"}</td>
+                      <td className="p-4 text-sm text-gray-600">{member.phone || "-"}</td>
+                      <td className="p-4 text-sm text-gray-600">{member.experience || "-"}</td>
+                      <td className="p-4 flex gap-2">
+                        <button
+                          onClick={() => editTeamMember(member)}
+                          className="p-2 text-cyan-600 hover:bg-cyan-50 rounded-lg transition"
+                          title="Edit"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+                            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z" />
+                            <path d="M20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+                          </svg>
+                        </button>
+                        <button
+                          onClick={() => deleteTeamMember(member._id)}
+                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition"
+                          title="Delete"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 sm:w-5 sm:h-5">
+                            <path d="M9 3a1 1 0 00-1 1v1H4a1 1 0 000 2h16a1 1 0 000-2h-4V4a1 1 0 00-1-1H9z" />
+                            <path fillRule="evenodd" d="M5 8a1 1 0 011-1h12a1 1 0 011 1v11a2 2 0 01-2 2H7a2 2 0 01-2-2V8zm3 2a1 1 0 00-1 1v7a1 1 0 102 0v-7a1 1 0 00-1-1zm5 0a1 1 0 00-1 1v7a1 1 0 102 0v-7a1 1 0 00-1-1z" clipRule="evenodd" />
+                          </svg>
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+            </>
+            )}
         </div>
       </section>
 
