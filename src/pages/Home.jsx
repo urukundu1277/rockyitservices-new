@@ -5,7 +5,6 @@ import Footer from "../components/Footer";
 import ServiceCard from "../components/ServiceCard";
 import Hero from "../components/Hero";
 import ReviewsSection from "../components/ReviewsSection";
-import TeamSection from "../components/TeamSection";
 
 const previewServices = [
   {
@@ -392,8 +391,6 @@ export default function Home() {
       )}
 
       <ReviewsSection />
-
-      <TeamSection />
 
       <Footer />
     </div>

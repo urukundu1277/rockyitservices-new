@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Services from "./pages/Services";
+import Team from "./pages/Team";
 import Admin from "./pages/Admin";
 import Dashboard from "./pages/Dashboard";
 import AdminLogin from "./pages/AdminLogin";
@@ -25,7 +26,9 @@ export default function App() {
 
         <Route path="/services" element={<Services />} />
 
-          <Route path="/contact" element={<Contact />} />
+        <Route path="/team" element={<Team />} />
+
+        <Route path="/contact" element={<Contact />} />
         <Route path="/admin-login" element={<AdminLogin />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/dashboard" element={<Dashboard />} />
