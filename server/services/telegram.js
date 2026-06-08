@@ -3,8 +3,11 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 
-const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
+// Read dynamically to ensure latest values from .env
+const getTelegramCredentials = () => ({
+  token: process.env.TELEGRAM_BOT_TOKEN,
+  chatId: process.env.TELEGRAM_CHAT_ID
+});
 
 // Base Telegram API URL
 const TELEGRAM_API = (token) => `https://api.telegram.org/bot${token}`;
@@ -140,9 +143,15 @@ function formatTelegramMessage({
 
 // Generic function to send a message to Telegram using axios (MarkdownV2)
 async function sendTelegramMessage(text, opts = {}) {
+  const { token: TELEGRAM_BOT_TOKEN, chatId: TELEGRAM_CHAT_ID } = getTelegramCredentials();
+  
   if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
     const errMsg = "TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID not configured in .env";
-    console.error(errMsg);
+    console.error("[telegram] Configuration error:", {
+      hasToken: !!TELEGRAM_BOT_TOKEN,
+      hasChatId: !!TELEGRAM_CHAT_ID,
+      envVars: Object.keys(process.env).filter(k => k.includes('TELEGRAM'))
+    });
     throw new Error(errMsg);
   }
 
@@ -157,7 +166,11 @@ async function sendTelegramMessage(text, opts = {}) {
   };
 
   // Debug: log outgoing payload (redact token)
-  console.debug("[telegram] Sending payload to Telegram", { chat_id: payload.chat_id, parse_mode: payload.parse_mode });
+  console.debug("[telegram] Sending payload to Telegram", { 
+    chat_id: payload.chat_id, 
+    parse_mode: payload.parse_mode,
+    textLength: text?.length
+  });
 
   try {
     const res = await axios.post(url, payload, { timeout: 7000 });
@@ -170,7 +183,12 @@ async function sendTelegramMessage(text, opts = {}) {
   } catch (error) {
     // Log detailed failure info but don't crash the app
     const apiData = error.response?.data;
-    console.error("[telegram] Failed to send message", { message: error.message, apiData });
+    console.error("[telegram] Failed to send message", { 
+      message: error.message, 
+      apiData,
+      status: error.response?.status,
+      url: url.split('/bot')[0] + '/bot***'
+    });
     throw new Error(`Failed to send Telegram message: ${apiData ? JSON.stringify(apiData) : error.message}`);
   }
 }
@@ -200,4 +218,5 @@ module.exports = {
   formatTelegramMessage,
   getServiceEmoji,
   sendAdminAlert,
+  escapeMarkdownV2,
 };

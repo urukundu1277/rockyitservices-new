@@ -1,8 +1,13 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
+
+// Ensure .env is loaded before anything else
+dotenv.config();
+
 const AdminOTP = require("../models/AdminOTP");
-const { sendTelegramMessage } = require("../services/telegram");
+const { sendTelegramMessage, escapeMarkdownV2 } = require("../services/telegram");
 
 const router = express.Router();
 
@@ -56,12 +61,23 @@ router.post("/request-otp", async (req, res) => {
     await otpRecord.save();
 
     // Send OTP via Telegram
-    const message = `Your Rocky IT Admin OTP is: ${otp}`;
+    const otpText = escapeMarkdownV2(otp);
+    const lines = [
+      "🔐 *Admin OTP Request*",
+      "",
+      "Your Rocky IT Admin OTP is:",
+      "",
+      `*${otpText}*`,
+      "",
+      "⏱️ *Expires in:* 5 minutes"
+    ];
+    const message = lines.join("\n");
     
     try {
-      await sendTelegramMessage(message);
+      const result = await sendTelegramMessage(message);
+      console.log("[admin-auth] OTP sent successfully to Telegram:", { ok: result?.ok, messageId: result?.result?.message_id });
     } catch (telegramError) {
-      console.error("Failed to send Telegram message:", telegramError.message);
+      console.error("[admin-auth] Failed to send OTP via Telegram:", telegramError.message || telegramError);
       // Delete the OTP record since we couldn't send it
       await AdminOTP.deleteOne({ _id: otpRecord._id });
       
@@ -286,12 +302,23 @@ router.post("/resend-otp", async (req, res) => {
     await otpRecord.save();
 
     // Send OTP via Telegram
-    const message = `Your Rocky IT Admin OTP is: ${otp}`;
+    const otpText = escapeMarkdownV2(otp);
+    const lines = [
+      "🔐 *Admin OTP Request*",
+      "",
+      "Your Rocky IT Admin OTP is:",
+      "",
+      `*${otpText}*`,
+      "",
+      "⏱️ *Expires in:* 5 minutes"
+    ];
+    const message = lines.join("\n");
     
     try {
-      await sendTelegramMessage(message);
+      const result = await sendTelegramMessage(message);
+      console.log("[admin-auth] OTP sent successfully to Telegram:", { ok: result?.ok, messageId: result?.result?.message_id });
     } catch (telegramError) {
-      console.error("Failed to send Telegram message:", telegramError.message);
+      console.error("[admin-auth] Failed to send OTP via Telegram:", telegramError.message || telegramError);
       await AdminOTP.deleteOne({ _id: otpRecord._id });
       
       return res.status(500).json({
