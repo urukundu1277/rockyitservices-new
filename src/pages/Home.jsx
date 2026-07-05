@@ -23,21 +23,6 @@ const previewServices = [
     desc: "Fast and secure website hosting and maintenance.",
   },
   {
-    title: "Laptop Repair",
-    icon: "💻",
-    desc: "Fast laptop hardware and software fixes.",
-  },
-  {
-    title: "Desktop Repair",
-    icon: "🖥️",
-    desc: "Desktop hardware & software troubleshooting.",
-  },
-  {
-    title: "Printer Repair",
-    icon: "🖨️",
-    desc: "Printer diagnostics and cartridge support.",
-  },
-  {
     title: "Networking Solutions",
     icon: "🌐",
     desc: "LAN/WAN setup and cabling.",
@@ -81,6 +66,21 @@ const previewServices = [
     title: "Remote IT Support",
     icon: "📞",
     desc: "Quick remote IT assistance.",
+  },
+    {
+    title: "Laptop Service",
+    icon: "💻",
+    desc: "Fast laptop hardware and software fixes.",
+  },
+  {
+    title: "Desktop Service",
+    icon: "🖥️",
+    desc: "Desktop hardware & software troubleshooting.",
+  },
+  {
+    title: "Printer Support",
+    icon: "🖨️",
+    desc: "Printer diagnostics and cartridge support.",
   },
 ];
 
