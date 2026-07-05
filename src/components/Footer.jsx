@@ -28,8 +28,8 @@ export default function Footer() {
           <ul className="mt-4 grid grid-cols-1 gap-2 text-gray-300 text-sm">
             <li><Link to="/services?service=AWS%20Cloud%20Services" className="hover:text-white transition-colors">AWS Cloud Services</Link></li>
             <li><Link to="/services?service=Networking%20Solutions" className="hover:text-white transition-colors">Website design</Link></li>
-            <li><Link to="/services?service=Laptop%20Repair" className="hover:text-white transition-colors">Laptop Repair</Link></li>
-            <li><Link to="/services?service=Desktop%20Repair" className="hover:text-white transition-colors">Desktop Repair and more services</Link></li>
+            <li><Link to="/services?service=Laptop%20Repair" className="hover:text-white transition-colors">Remote IT Support</Link></li>
+            <li><Link to="/services?service=Desktop%20Repair" className="hover:text-white transition-colors">Website Hosting and more services</Link></li>
           </ul>
         </div>
 
