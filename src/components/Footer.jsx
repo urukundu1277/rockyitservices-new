@@ -19,7 +19,7 @@ export default function Footer() {
               <div>212, Mahankali Nagar, Kukatpally</div>
               <div>Hyderabad, Telangana - 500072, India</div>
               <div className="mt-2">Phone: <a href="tel:+918309931417" className="hover:text-white">+91 83099 31417</a></div>
-              <div>Email: <a href="mailto:urukundu@rockyitservices.com" className="hover:text-white">urukundu@rockyitservices.com</a></div>
+              <div>Email: <a href="mailto:support@rockyitservices.com" className="hover:text-white">support@rockyitservices.com</a></div>
             </div>
           </div>
 
@@ -27,7 +27,7 @@ export default function Footer() {
             <h4 className="text-md sm:text-lg font-semibold text-white">Services</h4>
             <ul className="mt-4 grid grid-cols-1 gap-2 text-gray-300 text-sm">
               <li><Link to="/services?service=AWS%20Cloud%20Services" className="hover:text-white transition-colors">AWS Cloud Services</Link></li>
-              <li><Link to="/services?service=Networking%20Solutions" className="hover:text-white transition-colors">Website design</Link></li>
+              <li><Link to="/services?service=Networking%20Solutions" className="hover:text-white transition-colors">Mail Services</Link></li>
               <li><Link to="/services?service=Laptop%20Repair" className="hover:text-white transition-colors">Remote IT Support</Link></li>
               <li><Link to="/services?service=Desktop%20Repair" className="hover:text-white transition-colors">Website Hosting and more services</Link></li>
             </ul>
@@ -56,7 +56,7 @@ export default function Footer() {
                 <div className="p-2 rounded-md bg-white/10">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12.713l11.985-7.6A.998.998 0 0023.99 4H.01a1 1 0 00-.995 1.113L11.999 12.713zM12 14.5L.01 7.199V19a1 1 0 001 1h21.98a1 1 0 001-1V7.199L12 14.5z" /></svg>
                 </div>
-                <a href="mailto:urukundu@rockyitservices.com" className="hover:text-white transition-colors">urukundu@rockyitservices.com</a>
+                <a href="mailto:support@rockyitservices.com" className="hover:text-white transition-colors">support@rockyitservices.com</a>
               </div>
 
               <div className="mt-5 flex flex-wrap items-center gap-3">
