@@ -19,7 +19,7 @@ export default function Footer() {
             <div>212, Mahankali Nagar, Kukatpally</div>
             <div>Hyderabad, Telangana - 500072, India</div>
             <div className="mt-2">Phone: <a href="tel:+918309931417" className="hover:text-white">+91 83099 31417</a></div>
-            <div>Email: <a href="mailto:support@rockyitservices.com" className="hover:text-white">support@rockyitservices.com</a></div>
+            <div>Email: <a href="mailto:urukundu@rockyitservices.com" className="hover:text-white">urukundu@rockyitservices.com</a></div>
           </div>
         </div>
 
